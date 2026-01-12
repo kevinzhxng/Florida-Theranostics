@@ -11,13 +11,13 @@ export default function Contact() {
   return (
     <>
       {/* Page Header */}
-      <Section className="pt-24 pb-12 md:pt-32 md:pb-16">
+      <Section className="pt-28 pb-16 md:pt-36 md:pb-20">
         <Container>
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4 text-gray-900">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-normal text-charcoal mb-6 leading-tight">
               Contact Us
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg md:text-xl text-text-muted leading-loose max-w-3xl">
               [PLACEHOLDER: Contact page introduction - Client to provide]
             </p>
           </div>
@@ -25,15 +25,15 @@ export default function Contact() {
       </Section>
 
       {/* Contact Information */}
-      <Section className="py-12 md:py-16">
+      <Section className="py-16 md:py-24">
         <Container>
-          <div className="max-w-3xl">
-            <div className="space-y-8 mb-12">
+          <div className="max-w-4xl">
+            <div className="space-y-10 md:space-y-12 mb-16">
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">
+                <h2 className="text-sm uppercase tracking-wider text-text-subtle mb-4 font-sans font-normal">
                   Address
                 </h2>
-                <p className="text-gray-700">
+                <p className="text-lg text-text-muted leading-loose font-sans">
                   [PLACEHOLDER: Street Address]
                   <br />
                   [PLACEHOLDER: City, State ZIP]
@@ -41,31 +41,31 @@ export default function Contact() {
               </div>
 
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">
+                <h2 className="text-sm uppercase tracking-wider text-text-subtle mb-4 font-sans font-normal">
                   Phone
                 </h2>
                 <a
                   href="tel:[PLACEHOLDER-PHONE]"
-                  className="text-gray-700 hover:text-gray-900"
+                  className="text-lg text-text-muted hover:text-charcoal transition-colors font-sans leading-loose"
                 >
                   [PLACEHOLDER: Phone Number]
                 </a>
               </div>
 
               <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">
+                <h2 className="text-sm uppercase tracking-wider text-text-subtle mb-4 font-sans font-normal">
                   Email
                 </h2>
                 <a
                   href="mailto:[PLACEHOLDER-EMAIL]"
-                  className="text-gray-700 hover:text-gray-900"
+                  className="text-lg text-text-muted hover:text-charcoal transition-colors font-sans leading-loose"
                 >
                   [PLACEHOLDER: Email Address]
                 </a>
               </div>
             </div>
 
-            <div className="pt-8 border-t border-gray-200">
+            <div className="pt-12 border-t border-gray-200/50">
               <Button href="mailto:[PLACEHOLDER-EMAIL]" variant="primary">
                 Send Email
               </Button>

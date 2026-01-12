@@ -14,13 +14,13 @@ export default function Button({
   className = "",
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center px-6 py-3 text-base font-medium transition-colors duration-200";
+    "inline-flex items-center justify-center px-8 py-3.5 text-sm font-sans font-normal tracking-wide transition-all duration-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-charcoal focus:ring-offset-2 focus:ring-offset-warm-white";
   
   const variants = {
     primary:
-      "bg-gray-900 text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2",
+      "bg-charcoal text-warm-white hover:bg-charcoal-light active:bg-charcoal-light",
     secondary:
-      "bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2",
+      "bg-transparent text-charcoal border border-charcoal/30 hover:border-charcoal hover:bg-charcoal/5 active:bg-charcoal/10",
   };
 
   // External links (mailto, tel, http)

@@ -5,38 +5,40 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200 py-12 md:py-16">
+    <footer className="border-t border-gray-200/50 bg-warm-white py-16 md:py-20">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-lg font-light text-gray-900 mb-4">
+            <h3 className="text-base font-serif font-normal text-charcoal mb-4 tracking-wide">
               Florida Theranostics
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-text-muted leading-relaxed">
               [PLACEHOLDER: Footer tagline - Client to provide]
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-4">Navigate</h4>
-            <nav className="flex flex-col space-y-2">
+            <h4 className="text-xs uppercase tracking-wider text-text-subtle mb-6 font-sans font-normal">
+              Navigate
+            </h4>
+            <nav className="flex flex-col space-y-3">
               <Link
                 href="/about-us"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm text-text-muted hover:text-charcoal transition-colors font-sans font-normal"
               >
                 About
               </Link>
               <Link
                 href="/services"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm text-text-muted hover:text-charcoal transition-colors font-sans font-normal"
               >
                 Services
               </Link>
               <Link
                 href="/contact"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm text-text-muted hover:text-charcoal transition-colors font-sans font-normal"
               >
                 Contact
               </Link>
@@ -45,13 +47,15 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-4">Contact</h4>
-            <div className="text-sm text-gray-600 space-y-2">
+            <h4 className="text-xs uppercase tracking-wider text-text-subtle mb-6 font-sans font-normal">
+              Contact
+            </h4>
+            <div className="text-sm text-text-muted space-y-3 font-sans font-normal leading-relaxed">
               <p>[PLACEHOLDER: Address]</p>
               <p>
                 <a
                   href="tel:[PLACEHOLDER-PHONE]"
-                  className="hover:text-gray-900 transition-colors"
+                  className="hover:text-charcoal transition-colors"
                 >
                   [PLACEHOLDER: Phone]
                 </a>
@@ -59,7 +63,7 @@ export default function Footer() {
               <p>
                 <a
                   href="mailto:[PLACEHOLDER-EMAIL]"
-                  className="hover:text-gray-900 transition-colors"
+                  className="hover:text-charcoal transition-colors"
                 >
                   [PLACEHOLDER: Email]
                 </a>
@@ -69,8 +73,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="pt-8 border-t border-gray-200">
-          <p className="text-sm text-gray-600 text-center">
+        <div className="pt-8 border-t border-gray-200/30">
+          <p className="text-xs text-text-subtle text-center font-sans font-normal">
             © {currentYear} Florida Theranostics. All rights reserved.
           </p>
         </div>

@@ -1,49 +1,63 @@
-import Container from "@/components/Container";
-import Section from "@/components/Section";
-import Button from "@/components/Button";
+import HeroSection from "@/components/HeroSection";
+import ImageTextSection from "@/components/ImageTextSection";
 
 export default function Home() {
   return (
     <>
-      {/* Hero Section */}
-      <Section className="pt-24 pb-16 md:pt-32 md:pb-24">
-        <Container>
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-6 text-gray-900">
-              Precision Medicine for{" "}
-              <span className="font-normal">Optimal Health</span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-              [PLACEHOLDER: Hero subtitle - Client to provide] Advanced
-              theranostics and concierge medicine services tailored to your
-              unique health needs.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button href="/contact" variant="primary">
-                Request Consultation
-              </Button>
-              <Button href="/about-us" variant="secondary">
-                Learn More
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </Section>
+      {/* Hero Section with Video Background */}
+      <HeroSection
+        // videoSrc="/videos/hero-video.mp4" // Uncomment when video is added
+        headline="Unlocking medicine in the ideal"
+        ctaText="Get in touch"
+        ctaHref="/contact"
+      />
 
-      {/* Introduction Section */}
-      <Section className="py-16 md:py-24 bg-gray-50">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-light mb-6 text-gray-900">
-              [PLACEHOLDER: Section Heading]
-            </h2>
-            <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              [PLACEHOLDER: Introduction text - Client to provide content from
-              current GoDaddy site]
+      {/* Our Promise Section */}
+      <ImageTextSection
+        title="Our Promise"
+        content={
+          <p>
+            [PLACEHOLDER: Our Promise content - Client to provide from current
+            GoDaddy site. This section should describe your commitment to
+            patients and your approach to care.]
+          </p>
+        }
+        imagePosition="right"
+        // imageSrc="/images/promise-image.jpg" // Uncomment when image is added
+        imageAlt="Our Promise"
+      />
+
+      {/* Our Difference Section */}
+      <ImageTextSection
+        title="Our Difference"
+        content={
+          <div className="space-y-8">
+            <p>
+              [PLACEHOLDER: Our Difference content - Client to provide. Describe
+              what makes your practice unique.]
             </p>
           </div>
-        </Container>
-      </Section>
+        }
+        imagePosition="left"
+        // imageSrc="/images/difference-image.jpg" // Uncomment when image is added
+        imageAlt="Our Difference"
+      />
+
+      {/* Our Principles Section */}
+      <ImageTextSection
+        title="Our Principles"
+        content={
+          <div className="space-y-8">
+            <p>
+              [PLACEHOLDER: Our Principles content - Client to provide. Explain
+              your core values and approach to patient care.]
+            </p>
+          </div>
+        }
+        imagePosition="right"
+        // imageSrc="/images/principles-image.jpg" // Uncomment when image is added
+        imageAlt="Our Principles"
+      />
     </>
   );
 }

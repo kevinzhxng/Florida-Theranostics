@@ -10,10 +10,10 @@ export default function AboutUs() {
   return (
     <>
       {/* Page Header */}
-      <Section className="pt-24 pb-12 md:pt-32 md:pb-16">
+      <Section className="pt-28 pb-16 md:pt-36 md:pb-20">
         <Container>
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4 text-gray-900">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-normal text-charcoal mb-6 leading-tight">
               About Us
             </h1>
           </div>
@@ -21,16 +21,18 @@ export default function AboutUs() {
       </Section>
 
       {/* Main Content */}
-      <Section className="py-12 md:py-16">
+      <Section className="py-16 md:py-24">
         <Container>
-          <div className="max-w-3xl prose prose-lg">
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              [PLACEHOLDER: About Us content - Client to provide from current
-              GoDaddy /about-us/ page]
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              [PLACEHOLDER: Additional paragraphs from current site]
-            </p>
+          <div className="max-w-4xl">
+            <div className="space-y-8 text-lg text-text-muted leading-loose">
+              <p>
+                [PLACEHOLDER: About Us content - Client to provide from current
+                GoDaddy /about-us/ page]
+              </p>
+              <p>
+                [PLACEHOLDER: Additional paragraphs from current site]
+              </p>
+            </div>
           </div>
         </Container>
       </Section>

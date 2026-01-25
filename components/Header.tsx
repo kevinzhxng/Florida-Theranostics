@@ -142,7 +142,7 @@ export default function Header() {
               href="/contact"
               className={`px-5 py-2.5 text-xs md:text-sm font-sans font-medium tracking-wide transition-all duration-300 border whitespace-nowrap ${
                 isLight
-                  ? "bg-charcoal text-warm-white border-charcoal hover:bg-charcoal-light"
+                  ? "bg-navy text-warm-white border-navy hover:bg-navy-light"
                   : "bg-white/10 text-white border-white/30 hover:bg-white/20 hover:border-white/50 backdrop-blur-sm"
               }`}
             >

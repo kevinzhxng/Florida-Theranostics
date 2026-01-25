@@ -11,11 +11,15 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
   }
 
   h1,

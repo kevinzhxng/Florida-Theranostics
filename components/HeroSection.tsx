@@ -51,14 +51,14 @@ export default function HeroSection({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex items-center justify-center">
+      <div className="relative z-10 h-full flex items-end justify-center pb-16 md:pb-20 lg:pb-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-normal text-white leading-[1.1] mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-normal text-white leading-[1.1] mb-6 md:mb-8">
             {parseHeadline(headline)}
           </h1>
           <Link
             href={ctaHref}
-            className="inline-block text-base md:text-lg font-sans font-normal text-white border-b border-white/50 hover:border-white transition-colors duration-300 tracking-wide"
+            className="inline-block text-sm md:text-lg font-sans font-semibold text-white border-b border-white/50 hover:border-white transition-colors duration-300 tracking-wide"
           >
             {ctaText}
           </Link>

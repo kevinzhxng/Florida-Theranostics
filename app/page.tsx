@@ -6,9 +6,9 @@ export default function Home() {
     <>
       {/* Hero Section with Video Background */}
       <HeroSection
-        // videoSrc="/videos/hero-video.mp4" // Uncomment when video is added
-        headline="Unlocking medicine in the ideal"
-        ctaText="Get in touch"
+        videoSrc="/videos/Florida Theranostics Video 1.mp4"
+        headline="Setting the Standard in Nuclear Medicine"
+        ctaText="Schedule a Consultation"
         ctaHref="/contact"
       />
 
@@ -23,7 +23,7 @@ export default function Home() {
           </p>
         }
         imagePosition="right"
-        // imageSrc="/images/promise-image.jpg" // Uncomment when image is added
+        // imageSrc="/public/images/promise-image.jpg" // Uncomment when image is added
         imageAlt="Our Promise"
       />
 

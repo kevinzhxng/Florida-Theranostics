@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ImageTextSection from "@/components/ImageTextSection";
@@ -33,14 +34,15 @@ const values = [
   },
 ];
 
-const teamMembers = [
-  {
-    name: "Dr. Ashok MuthuKrishnan",
-    title: "Founder & Chief Physician",
-    bio: "Dr. Krishnan has close to 20 years of academic practice experience as a nuclear medicine physician, teacher, and researcher at the University of Pittsburgh Medical Center. He has published more than 40 peer-reviewed journal articles and presented at national and international conferences. Florida Theranostics has been acknowledged as a distinguished Radiopharmaceutical Therapy Center of Excellence by the Society of Nuclear Medicine and Molecular Imaging—the first and only site of its kind in South Florida.",
-    imageSrc: "/images/headshots/FLTDEC2025-25.jpg",
-    imageAlt: "Dr. Ashok MuthuKrishnan",
-  },
+const chiefPhysician = {
+  name: "Dr. Ashok MuthuKrishnan",
+  title: "Founder & Chief Physician",
+  bio: "Dr. Krishnan has close to 20 years of academic practice experience as a nuclear medicine physician, teacher, and researcher at the University of Pittsburgh Medical Center. He has published more than 40 peer-reviewed journal articles and presented at national and international conferences. Florida Theranostics has been acknowledged as a distinguished Radiopharmaceutical Therapy Center of Excellence by the Society of Nuclear Medicine and Molecular Imaging—the first and only site of its kind in South Florida.",
+  imageSrc: "/images/headshots/FLTDEC2025-25.jpg",
+  imageAlt: "Dr. Ashok MuthuKrishnan",
+};
+
+const staffMembers = [
   {
     name: 'Charles "Chuck" Jordan',
     title: "Technical Director & Chief Tech",
@@ -49,24 +51,24 @@ const teamMembers = [
     imageAlt: "Charles Chuck Jordan",
   },
   {
-    name: "Anna Shawley",
-    title: "Business Development Manager",
-    bio: "B.S., MBA with extensive background as a physician outreach specialist in South Florida. She educates the community about theranostics and cutting-edge molecular radioligand therapy and imaging, and serves as liaison with industry partners and key practices in the region.",
-    imageSrc: "/images/headshots/rsw_1200h_1600cg_true-1-1151x1536.webp",
-    imageAlt: "Anna Shawley",
+    name: "Nora Felps",
+    title: "Physician Relations Liaison",
+    bio: "Nora Felps brings several years of marketing and outreach experience in the Florida markets. She works to build strong physician relationships, educate providers on molecular imaging and radioligand therapies, and support the growth of Florida Theranostics.",
+    imageSrc: "/images/headshots/FLTDEC2025-21.jpg",
+    imageAlt: "Nora Felps",
   },
   {
     name: "Steve Shields",
     title: "Nuclear Medicine Technologist",
     bio: "ARRT (N) with close to three decades of Nuclear Medicine Technology experience. He serves as one of the lead nuclear medicine technologists in preparing and setting up patients for radioactive therapies on the day of radioligand therapy infusion.",
-    imageSrc: "/images/headshots/rsw_1189h_1585cg_true-1151x1536.webp",
+    imageSrc: "/images/headshots/FLTDEC2025-26.jpg",
     imageAlt: "Steve Shields",
   },
   {
     name: "Jasmin Molina",
     title: "Clinical Coordinator",
     bio: "Certified medical assistant with extensive experience in medical office settings. Known for her dedication to organization and efficiency, Jasmin ensures a seamless and supportive environment that prioritizes patient care with professionalism and compassion.",
-    imageSrc: "/images/headshots/rsw_1200h_1600cg_true-2-1151x1536.webp",
+    imageSrc: "/images/headshots/8R3A7555.jpeg",
     imageAlt: "Jasmin Molina",
   },
   {
@@ -82,6 +84,13 @@ const teamMembers = [
     bio: "Lead Nuclear Medicine Technologist with eight years of experience. Passionate about patient care and making procedures comfortable and stress-free. From cardiac stress testing to general Nuclear Medicine, Theranostics, and PET-CT, she combines expertise with compassion for every patient.",
     imageSrc: "/images/headshots/FLTDEC2025-27.jpg",
     imageAlt: "Jourdan Garcia",
+  },
+  {
+    name: "Alekhya Muliki",
+    title: "Clinical Research Coordinator",
+    bio: "...",
+    imageSrc: "/images/headshots/FLTDEC2025-4.jpg",
+    imageAlt: "Alekhya Muliki",
   },
 ];
 
@@ -117,7 +126,7 @@ export default function AboutUs() {
       />
 
       {/* Our Values */}
-      <Section className="py-10 md:py-14 bg-warm-white">
+      <Section className="py-10 md:py-14 bg-surface-cool">
         <Container>
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
@@ -139,8 +148,49 @@ export default function AboutUs() {
         </Container>
       </Section>
 
-      {/* Meet The Team */}
-      <TeamSection title="Meet The Team" members={teamMembers} />
+      {/* Chief Physician and Founder */}
+      <Section className="py-10 md:py-14 bg-warm-white">
+        <Container>
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-10 md:mb-12 text-center leading-tight">
+              Meet The Team
+            </h2>
+            <p className="text-center text-lg text-text-muted max-w-2xl mx-auto mb-12 md:mb-14">
+              Our team is committed to providing the highest quality care. We encourage you to ask questions and speak freely with us about your concerns and needs.
+            </p>
+            <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-6 md:mb-8 uppercase tracking-wider text-navy/90">
+              Chief Physician and Founder
+            </h3>
+            <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start bg-warm-white border border-charcoal/10 overflow-hidden">
+              <div className="w-full md:w-80 lg:w-96 shrink-0">
+                <div className="relative w-full aspect-[3/4] bg-gray-100">
+                  <Image
+                    src={chiefPhysician.imageSrc}
+                    alt={chiefPhysician.imageAlt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 384px"
+                  />
+                </div>
+              </div>
+              <div className="p-6 md:p-8 lg:p-10 flex flex-col flex-grow">
+                <h4 className="text-2xl md:text-3xl font-serif font-normal text-charcoal mb-1 leading-tight">
+                  {chiefPhysician.name}
+                </h4>
+                <p className="text-sm uppercase tracking-wider text-navy font-sans mb-6">
+                  {chiefPhysician.title}
+                </p>
+                <p className="text-base md:text-lg text-text-muted leading-relaxed">
+                  {chiefPhysician.bio}
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Staff */}
+      <TeamSection title="Staff" members={staffMembers} />
 
       {/* Your Partners in Advanced Care - CTA (charcoal to distinguish from navy footer) */}
       <Section className="py-10 md:py-14 bg-charcoal">

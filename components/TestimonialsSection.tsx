@@ -29,7 +29,7 @@ export default function TestimonialsSection({
   }, [testimonials.length]);
 
   return (
-    <Section className="pb-20 md:pb-28 bg-warm-white">
+    <Section className="py-10 md:py-14 bg-warm-white">
       <Container>
         <div className="max-w-5xl mx-auto">
           {title && (

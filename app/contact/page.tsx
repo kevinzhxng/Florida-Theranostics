@@ -67,9 +67,9 @@ export default function Contact() {
   return (
     <>
       {/* Contact Section */}
-      <Section className="pt-24 pb-8 md:pt-28 md:pb-12">
+      <Section className="py-10 md:py-14">
         <Container>
-          <div className="max-w-4xl mx-auto pt-6 md:pt-12">
+          <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
               {/* Contact Information */}
               <div>

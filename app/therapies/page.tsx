@@ -10,7 +10,7 @@ export default function Therapies() {
   return (
     <>
       {/* Page Header */}
-      <Section className="pt-28 pb-16 md:pt-36 md:pb-20">
+      <Section className="py-10 md:py-14">
         <Container>
           <div className="max-w-4xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-normal text-charcoal mb-6 leading-tight">
@@ -24,7 +24,7 @@ export default function Therapies() {
       </Section>
 
       {/* Main Content */}
-      <Section className="py-16 md:py-24">
+      <Section className="py-10 md:py-14">
         <Container>
           <div className="max-w-4xl space-y-12">
             <div>

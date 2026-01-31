@@ -61,13 +61,15 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero Section with Video Background */}
-      <HeroSection
-        videoSrc="/videos/Florida Theranostics Video 1.mp4"
-        headline="Setting the Standard in Nuclear Medicine"
-        ctaText="Schedule a Consultation"
-        ctaHref="/contact"
-      />
+      {/* Hero Section with Video Background - negative margin so it sits under fixed nav */}
+      <div className="-mt-24 md:-mt-28">
+        <HeroSection
+          videoSrc="/videos/Florida Theranostics Video 1.mp4"
+          headline="Setting the Standard in Nuclear Medicine"
+          ctaText="Schedule a Consultation"
+          ctaHref="/contact"
+        />
+      </div>
 
       {/* Smart Diagnostics Section */}
       <FeaturesSection

@@ -21,7 +21,7 @@ export default function FeaturesSection({
   features,
 }: FeaturesSectionProps) {
   return (
-    <Section className="py-20 md:py-28 bg-warm-white">
+    <Section className="py-10 md:py-14 bg-warm-white">
       <Container>
         <div className="max-w-7xl mx-auto">
           {title && (

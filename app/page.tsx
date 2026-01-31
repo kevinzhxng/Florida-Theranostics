@@ -65,7 +65,7 @@ export default function Home() {
       <div className="-mt-24 md:-mt-28">
         <HeroSection
           videoSrc="/videos/Florida Theranostics Video 1.mp4"
-          headline="Setting the Standard in Nuclear Medicine"
+          headline="Setting the Standard in Molecular imaging and Theranostics"
           ctaText="Schedule a Consultation"
           ctaHref="/contact"
         />
@@ -79,6 +79,7 @@ export default function Home() {
 
       {/* Leading Expertise Section */}
       <ImageTextSection
+        className="bg-surface-cool"
         title="Leading Expertise in Radiopharmaceutical Therapy"
         content={
           <p>
@@ -127,6 +128,7 @@ export default function Home() {
 
       {/* Explore Imaging Solutions Section */}
       <ImageTextSection
+        className="bg-surface-cool"
         title="Explore Imaging Solutions"
         content={
           <div className="space-y-6">

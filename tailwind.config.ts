@@ -13,7 +13,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         // MD2.com inspired color palette + logo colors
         "warm-white": "#f5f3f0", // Cream/off-white
-        "cream": "#f5f3f0",
+        cream: "#f5f3f0",
         "charcoal": "#2c2c2c", // Dark grey/charcoal
         "charcoal-light": "#3a3a3a",
         "navy": "#1a2332", // Dark navy blue (from logo)
@@ -23,6 +23,9 @@ const config: Config = {
         "text-muted": "#6b6a67",
         "text-subtle": "#9b9a97",
         accent: "#1a2332", // Navy as accent
+        // Alternate section backgrounds (modern rhythm)
+        "surface": "#f8f7f5", // Slightly warmer than warm-white
+        "surface-cool": "#f2f4f8", // Very light blue-grey, ties to navy
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],

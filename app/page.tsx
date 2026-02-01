@@ -30,8 +30,17 @@ const DEFAULT_TESTIMONIALS = [
   { quote: "Top notch in every way. Everyone on the team has been very well-informed and communicative about the procedures and scheduling. The office feels like an immaculate, very welcoming home and is extremely comfortable to get treatments in. Thank you very much to Dr. Krishnan and Chuck for this amazing treatment in Jupiter. I hope to be able to update my review after scans at the end of my rounds of treatment with news that they worked!", author: "Scott Wheeler" },
 ];
 
+const DEFAULT_HERO_HEADLINES = [
+  "Setting the Standard in Molecular Imaging and Theranostics",
+  "Precision Medicine. Personalized Care.",
+  "Advanced Radioligand Therapy in South Florida",
+  "Where Innovation Meets Compassionate Care",
+  "Leading the Future of Molecular Imaging",
+  "Your Partner in Precision Cancer Care",
+];
+
 export default async function Home() {
-  let heroHeadline = "Setting the Standard in Molecular imaging and Theranostics";
+  let heroHeadlines: string[] = DEFAULT_HERO_HEADLINES;
   let heroCtaText = "Schedule a Consultation";
   let heroCtaHref = "/contact";
   let heroVideoUrl: string | undefined = "/videos/Florida Theranostics Video 1.mp4";
@@ -45,6 +54,7 @@ export default async function Home() {
     try {
       const data = await client.fetch<{
         heroHeadline?: string | null;
+        heroHeadlines?: (string | null)[] | null;
         heroCtaText?: string | null;
         heroCtaHref?: string | null;
         heroVideo?: { asset?: { url?: string | null } | null } | null;
@@ -56,7 +66,13 @@ export default async function Home() {
       } | null>(homePageQuery, {}, fetchOptions);
 
       if (data) {
-        if (data.heroHeadline) heroHeadline = data.heroHeadline;
+        const cmsHeadlines = (data.heroHeadlines ?? [])
+          .filter((h): h is string => typeof h === "string" && h.trim().length > 0);
+        if (cmsHeadlines.length > 0) {
+          heroHeadlines = cmsHeadlines;
+        } else if (data.heroHeadline?.trim()) {
+          heroHeadlines = [data.heroHeadline.trim()];
+        }
         if (data.heroCtaText) heroCtaText = data.heroCtaText;
         if (data.heroCtaHref) heroCtaHref = data.heroCtaHref;
         if (data.heroVideo?.asset?.url) heroVideoUrl = data.heroVideo.asset.url;
@@ -99,7 +115,7 @@ export default async function Home() {
       <div className="-mt-24 md:-mt-28">
         <HeroSection
           videoSrc={heroVideoUrl || undefined}
-          headline={heroHeadline}
+          headlines={heroHeadlines}
           ctaText={heroCtaText}
           ctaHref={heroCtaHref}
         />

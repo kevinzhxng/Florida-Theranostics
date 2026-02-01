@@ -161,7 +161,15 @@ async function seed() {
   await client.createOrReplace({
     _id: "homePage",
     _type: "homePage",
-    heroHeadline: "Setting the Standard in Molecular imaging and Theranostics",
+    heroHeadline: "Setting the Standard in Molecular Imaging and Theranostics",
+    heroHeadlines: [
+      "Setting the Standard in Molecular Imaging and Theranostics",
+      "Precision Medicine. Personalized Care.",
+      "Advanced Radioligand Therapy in South Florida",
+      "Where Innovation Meets Compassionate Care",
+      "Leading the Future of Molecular Imaging",
+      "Your Partner in Precision Cancer Care",
+    ],
     heroCtaText: "Schedule a Consultation",
     heroCtaHref: "/contact",
     ...(heroVideoAsset && { heroVideo: { _type: "file", asset: { _type: "reference", _ref: heroVideoAsset._id } } }),

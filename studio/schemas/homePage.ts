@@ -14,10 +14,22 @@ export const homePage = defineType({
     // Hero
     defineField({
       name: "heroHeadline",
-      title: "Hero headline",
+      title: "Hero headline (fallback)",
       type: "string",
       group: "hero",
-      initialValue: "Setting the Standard in Molecular imaging and Theranostics",
+      description: "Used when no rotating phrases are set, or as the first phrase.",
+      initialValue: "Setting the Standard in Molecular Imaging and Theranostics",
+    }),
+    defineField({
+      name: "heroHeadlines",
+      title: "Rotating hero phrases",
+      type: "array",
+      group: "hero",
+      description: "Phrases that rotate in the hero with a fade animation. Add multiple to cycle through; leave empty to use the single headline above.",
+      of: [{ type: "string" }],
+      options: {
+        layout: "list",
+      },
     }),
     defineField({
       name: "heroCtaText",
@@ -131,9 +143,11 @@ export const homePage = defineType({
     }),
   ],
   preview: {
-    select: { heroHeadline: "heroHeadline" },
-    prepare({ heroHeadline }) {
-      return { title: "Home Page", subtitle: heroHeadline ? heroHeadline.slice(0, 50) + "…" : "Hero + features + testimonials" };
+    select: { heroHeadline: "heroHeadline", heroHeadlines: "heroHeadlines" },
+    prepare({ heroHeadline, heroHeadlines }) {
+      const first = Array.isArray(heroHeadlines) && heroHeadlines.length > 0 ? heroHeadlines[0] : heroHeadline;
+      const sub = typeof first === "string" ? first.slice(0, 50) + "…" : "Hero + features + testimonials";
+      return { title: "Home Page", subtitle: sub };
     },
   },
 });

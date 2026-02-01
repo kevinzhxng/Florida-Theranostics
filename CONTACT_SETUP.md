@@ -19,11 +19,18 @@ Create a `.env.local` file in the root of your project:
 ```env
 RESEND_API_KEY=re_your_api_key_here
 CONTACT_EMAIL=your-email@example.com
+
+# Optional: reCAPTCHA (recommended to block bots)
+# See CONTACT_RECAPTCHA_SETUP.md for step-by-step setup.
+# NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_site_key
+# RECAPTCHA_SECRET_KEY=your_secret_key
 ```
 
 Replace:
 - `re_your_api_key_here` with your actual Resend API key
 - `your-email@example.com` with the email address where you want to receive contact form submissions
+
+**reCAPTCHA (optional):** To prevent bots from submitting the contact form, add Google reCAPTCHA. See **[CONTACT_RECAPTCHA_SETUP.md](./CONTACT_RECAPTCHA_SETUP.md)** for step-by-step instructions.
 
 ### Step 3: Verify Your Domain (Optional but Recommended)
 

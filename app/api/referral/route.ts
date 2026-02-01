@@ -1,72 +1,85 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { escapeHtml, sanitizeFilename } from "@/lib/security";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB per file
 const MAX_TOTAL_FILES = 5;
+const MAX_TOTAL_ATTACHMENT_SIZE = 25 * 1024 * 1024; // 25 MB total
+const MAX_FIELD_LENGTH = 500;
+const MAX_DIAGNOSIS_LENGTH = 2000;
 
 function formatSection(title: string, entries: [string, string | undefined][]): string {
   const lines = entries
     .filter(([, v]) => v !== undefined && v !== "")
-    .map(([k, v]) => `<p style="margin: 6px 0;"><strong>${k}:</strong> ${String(v).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`)
+    .map(([k, v]) => `<p style="margin: 6px 0;"><strong>${escapeHtml(k)}:</strong> ${escapeHtml(String(v))}</p>`)
     .join("");
-  return `<div style="margin-bottom: 20px;"><h3 style="color: #1a2332; margin-bottom: 8px;">${title}</h3>${lines}</div>`;
+  return `<div style="margin-bottom: 20px;"><h3 style="color: #1a2332; margin-bottom: 8px;">${escapeHtml(title)}</h3>${lines}</div>`;
+}
+
+function getString(formData: FormData, key: string): string {
+  const v = formData.get(key);
+  return typeof v === "string" ? v.trim() : "";
+}
+
+function truncate(str: string, max: number): string {
+  return str.slice(0, max);
 }
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    const patientName = formData.get("patientName") as string | null;
-    const dob = formData.get("dob") as string | null;
-    const phone = formData.get("phone") as string | null;
-    const cell = formData.get("cell") as string | null;
-    const height = formData.get("height") as string | null;
-    const weight = formData.get("weight") as string | null;
-    const address1 = formData.get("address1") as string | null;
-    const address2 = formData.get("address2") as string | null;
-    const city = formData.get("city") as string | null;
-    const state = formData.get("state") as string | null;
-    const insurancePrimary = formData.get("insurancePrimary") as string | null;
-    const insuranceSecondary = formData.get("insuranceSecondary") as string | null;
-    const subscriberIdPrimary = formData.get("subscriberIdPrimary") as string | null;
-    const subscriberIdSecondary = formData.get("subscriberIdSecondary") as string | null;
-    const referringPhysician = formData.get("referringPhysician") as string | null;
-    const physicianNpi = formData.get("physicianNpi") as string | null;
-    const physicianSignature = formData.get("physicianSignature") as string | null;
-    const physicianPhone = formData.get("physicianPhone") as string | null;
-    const physicianFax = formData.get("physicianFax") as string | null;
-    const diagnosisReason = formData.get("diagnosisReason") as string | null;
-    const molecularImaging = formData.get("molecularImaging") as string | null;
-    const radioligandTherapy = formData.get("radioligandTherapy") as string | null;
-    const replyEmail = formData.get("replyEmail") as string | null;
+    const patientName = truncate(getString(formData, "patientName"), MAX_FIELD_LENGTH);
+    const dob = truncate(getString(formData, "dob"), MAX_FIELD_LENGTH);
+    const phone = truncate(getString(formData, "phone"), 20);
+    const cell = truncate(getString(formData, "cell"), 20);
+    const height = truncate(getString(formData, "height"), MAX_FIELD_LENGTH);
+    const weight = truncate(getString(formData, "weight"), MAX_FIELD_LENGTH);
+    const address1 = truncate(getString(formData, "address1"), MAX_FIELD_LENGTH);
+    const address2 = truncate(getString(formData, "address2"), MAX_FIELD_LENGTH);
+    const city = truncate(getString(formData, "city"), MAX_FIELD_LENGTH);
+    const state = truncate(getString(formData, "state"), MAX_FIELD_LENGTH);
+    const insurancePrimary = truncate(getString(formData, "insurancePrimary"), MAX_FIELD_LENGTH);
+    const insuranceSecondary = truncate(getString(formData, "insuranceSecondary"), MAX_FIELD_LENGTH);
+    const subscriberIdPrimary = truncate(getString(formData, "subscriberIdPrimary"), MAX_FIELD_LENGTH);
+    const subscriberIdSecondary = truncate(getString(formData, "subscriberIdSecondary"), MAX_FIELD_LENGTH);
+    const referringPhysician = truncate(getString(formData, "referringPhysician"), MAX_FIELD_LENGTH);
+    const physicianNpi = truncate(getString(formData, "physicianNpi"), MAX_FIELD_LENGTH);
+    const physicianSignature = truncate(getString(formData, "physicianSignature"), MAX_FIELD_LENGTH);
+    const physicianPhone = truncate(getString(formData, "physicianPhone"), 20);
+    const physicianFax = truncate(getString(formData, "physicianFax"), 20);
+    const diagnosisReason = truncate(getString(formData, "diagnosisReason"), MAX_DIAGNOSIS_LENGTH);
+    const molecularImaging = truncate(getString(formData, "molecularImaging"), MAX_FIELD_LENGTH);
+    const radioligandTherapy = truncate(getString(formData, "radioligandTherapy"), MAX_FIELD_LENGTH);
+    const replyEmail = truncate(getString(formData, "replyEmail"), 254);
 
-    if (!patientName?.trim() || !dob?.trim() || !phone?.trim() || !height?.trim() || !weight?.trim()) {
+    if (!patientName || !dob || !phone || !height || !weight) {
       return NextResponse.json(
         { error: "Patient name, DOB, phone, height, and weight are required." },
         { status: 400 }
       );
     }
-    if (!address1?.trim() || !insurancePrimary?.trim() || !subscriberIdPrimary?.trim()) {
+    if (!address1 || !insurancePrimary || !subscriberIdPrimary) {
       return NextResponse.json(
         { error: "Address, primary insurance, and primary subscriber ID are required." },
         { status: 400 }
       );
     }
-    if (!referringPhysician?.trim() || !physicianSignature?.trim() || !physicianPhone?.trim()) {
+    if (!referringPhysician || !physicianSignature || !physicianPhone) {
       return NextResponse.json(
         { error: "Referring physician, physician signature, and physician phone are required." },
         { status: 400 }
       );
     }
-    if (!diagnosisReason?.trim()) {
+    if (!diagnosisReason) {
       return NextResponse.json(
         { error: "Diagnosis and reason for order are required." },
         { status: 400 }
       );
     }
-    if (!radioligandTherapy?.trim() && !molecularImaging?.trim()) {
+    if (!radioligandTherapy && !molecularImaging) {
       return NextResponse.json(
         { error: "Please select at least one Molecular Imaging study or Radioligand Therapy." },
         { status: 400 }
@@ -80,10 +93,11 @@ export async function POST(request: NextRequest) {
       if (!(file instanceof File) || !file.size) continue;
       if (attachments.length >= MAX_TOTAL_FILES) break;
       if (file.size > MAX_FILE_SIZE) continue;
+      if (totalSize + file.size > MAX_TOTAL_ATTACHMENT_SIZE) break;
       totalSize += file.size;
-      if (totalSize > 25 * 1024 * 1024) break;
       const buffer = Buffer.from(await file.arrayBuffer());
-      attachments.push({ filename: file.name || "attachment", content: buffer });
+      const safeName = sanitizeFilename(file.name || "attachment");
+      attachments.push({ filename: safeName, content: buffer });
     }
 
     const recipientEmail = process.env.REFERRAL_EMAIL || process.env.CONTACT_EMAIL || "your-email@example.com";
@@ -121,7 +135,7 @@ export async function POST(request: NextRequest) {
           ["Molecular Imaging", molecularImaging ?? undefined],
           ["Radioligand Therapy", radioligandTherapy ?? undefined],
         ])}
-        ${replyEmail ? `<p style="margin-top: 16px;"><strong>Reply-to email:</strong> ${replyEmail}</p>` : ""}
+        ${replyEmail ? `<p style="margin-top: 16px;"><strong>Reply-to email:</strong> ${escapeHtml(replyEmail)}</p>` : ""}
       </div>
     `;
 

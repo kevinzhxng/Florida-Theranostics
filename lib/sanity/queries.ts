@@ -29,6 +29,7 @@ export const siteSettingsQuery = groq`
 export const homePageQuery = groq`
   *[_type == "homePage"][0] {
     heroHeadline,
+    heroHeadlines,
     heroCtaText,
     heroCtaHref,
     heroVideo { asset->{ url } },

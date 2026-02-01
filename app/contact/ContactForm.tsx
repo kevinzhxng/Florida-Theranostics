@@ -1,11 +1,36 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
+
+declare global {
+  interface Window {
+    grecaptcha?: {
+      getResponse: () => string;
+      reset: () => void;
+    };
+  }
+}
+
 const inputClass = "w-full px-4 py-2.5 border border-charcoal/20 bg-warm-white text-charcoal focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent transition-all font-sans text-sm";
+const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_MESSAGE_LENGTH = 2000;
+
+function formatPhoneDisplay(digits: string): string {
+  const d = digits.replace(/\D/g, "").slice(0, 10);
+  if (d.length <= 3) return d ? `(${d}` : "";
+  if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
+function parsePhoneDigits(value: string): string {
+  return value.replace(/\D/g, "").slice(0, 10);
+}
 
 export default function ContactForm({
   pageTitle = "Contact Us",
@@ -30,20 +55,62 @@ export default function ContactForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
 
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY) return;
+    if (typeof window !== "undefined" && document.querySelector('script[src*="google.com/recaptcha"]')) return;
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
+
+  const getRecaptchaToken = (): string => {
+    if (typeof window === "undefined" || !window.grecaptcha?.getResponse) return "";
+    return window.grecaptcha.getResponse() ?? "";
+  };
+
+  const resetRecaptcha = () => {
+    if (typeof window !== "undefined" && window.grecaptcha?.reset) {
+      window.grecaptcha.reset();
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const phoneDigits = parsePhoneDigits(formData.phone);
+    if (formData.phone && phoneDigits.length !== 10) {
+      setSubmitStatus({ type: "error", message: "Please enter a valid 10-digit phone number, or leave phone blank." });
+      return;
+    }
+    if (RECAPTCHA_SITE_KEY) {
+      const token = getRecaptchaToken();
+      if (!token) {
+        setSubmitStatus({ type: "error", message: "Please complete the \"I'm not a robot\" check before sending." });
+        return;
+      }
+    }
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
     try {
+      const recaptchaToken = RECAPTCHA_SITE_KEY ? getRecaptchaToken() : undefined;
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: phoneDigits ? formatPhoneDisplay(phoneDigits) : "",
+        message: formData.message.trim(),
+        recaptchaToken,
+      };
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       const data = await response.json();
       if (response.ok) {
         setSubmitStatus({ type: "success", message: successMessage });
         setFormData({ name: "", email: "", phone: "", message: "" });
+        resetRecaptcha();
       } else {
         setSubmitStatus({ type: "error", message: data.error || "Something went wrong. Please try again." });
       }
@@ -55,7 +122,25 @@ export default function ContactForm({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "phone") {
+      const digits = parsePhoneDigits(value);
+      setFormData((prev) => ({ ...prev, phone: formatPhoneDisplay(digits) }));
+      return;
+    }
+    if (name === "name") {
+      setFormData((prev) => ({ ...prev, name: value.slice(0, MAX_NAME_LENGTH) }));
+      return;
+    }
+    if (name === "email") {
+      setFormData((prev) => ({ ...prev, email: value.slice(0, MAX_EMAIL_LENGTH) }));
+      return;
+    }
+    if (name === "message") {
+      setFormData((prev) => ({ ...prev, message: value.slice(0, MAX_MESSAGE_LENGTH) }));
+      return;
+    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -95,20 +180,75 @@ export default function ContactForm({
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-sans font-medium text-charcoal mb-2">Name *</label>
-                  <input type="text" id="name" name="name" required value={formData.name} onChange={handleChange} className={inputClass} placeholder="Your name" />
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    maxLength={MAX_NAME_LENGTH}
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={inputClass}
+                    placeholder="Your full name"
+                    autoComplete="name"
+                  />
+                  <p className="mt-1 text-xs text-text-subtle font-sans">{formData.name.length}/{MAX_NAME_LENGTH}</p>
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-sans font-medium text-charcoal mb-2">Email *</label>
-                  <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange} className={inputClass} placeholder="your.email@example.com" />
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    maxLength={MAX_EMAIL_LENGTH}
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={inputClass}
+                    placeholder="your.email@example.com"
+                    autoComplete="email"
+                  />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-sans font-medium text-charcoal mb-2">Phone</label>
-                  <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className={inputClass} placeholder="(555) 123-4567" />
+                  <label htmlFor="phone" className="block text-sm font-sans font-medium text-charcoal mb-2">Phone (10-digit US)</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={inputClass}
+                    placeholder="(555) 123-4567"
+                    autoComplete="tel"
+                    inputMode="numeric"
+                    maxLength={14}
+                  />
+                  <p className="mt-1 text-xs text-text-subtle font-sans">Optional. Enter 10 digits; formatting is automatic.</p>
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-sans font-medium text-charcoal mb-2">Message *</label>
-                  <textarea id="message" name="message" required rows={4} value={formData.message} onChange={handleChange} className={`${inputClass} resize-none`} placeholder="How can we help you?" />
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={4}
+                    maxLength={MAX_MESSAGE_LENGTH}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className={`${inputClass} resize-none`}
+                    placeholder="How can we help you?"
+                  />
+                  <p className="mt-1 text-xs text-text-subtle font-sans">{formData.message.length}/{MAX_MESSAGE_LENGTH} characters</p>
                 </div>
+                {RECAPTCHA_SITE_KEY && (
+                  <div
+                    className="g-recaptcha"
+                    data-sitekey={RECAPTCHA_SITE_KEY}
+                    data-theme="light"
+                    data-size="normal"
+                    aria-label="reCAPTCHA"
+                  />
+                )}
                 {submitStatus.type && (
                   <div className={`p-4 rounded-sm ${submitStatus.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"}`}>
                     <p className="text-sm font-sans">{submitStatus.message}</p>

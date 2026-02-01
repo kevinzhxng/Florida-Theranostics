@@ -1,13 +1,29 @@
-// Type definitions for Sanity CMS content
-// Will be expanded in Phase 2 when Sanity schemas are created
+// Types for Sanity CMS content (used by layout, Header, Footer, pages)
+
+export interface NavLink {
+  label?: string | null;
+  href?: string | null;
+  isExternal?: boolean;
+}
 
 export interface SiteSettings {
-  siteName: string;
-  logoText: string;
-  address: string;
-  phone: string;
-  email: string;
-  // Additional fields will be added in Phase 2
+  siteTitle?: string | null;
+  defaultMetaDescription?: string | null;
+  logoLine1?: string | null;
+  logoLine2?: string | null;
+  logo?: unknown;
+  navMainLinks?: NavLink[] | null;
+  navPatientPortalLabel?: string | null;
+  navPatientPortalHref?: string | null;
+  navContactLabel?: string | null;
+  footerTagline?: string | null;
+  footerNavTitle?: string | null;
+  footerResourcesTitle?: string | null;
+  footerContactTitle?: string | null;
+  footerCopyright?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  hours?: string | null;
 }
 
 export interface Page {
@@ -15,8 +31,6 @@ export interface Page {
   title: string;
   seoTitle?: string;
   seoDescription?: string;
-  // Sections will be added in Phase 2
 }
 
-// Placeholder - will be expanded with Sanity schema types
 export type SectionType = "hero" | "textBlock" | "featureList" | "imageText" | "callToAction";

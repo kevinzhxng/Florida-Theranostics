@@ -163,7 +163,7 @@ ${replyEmail ? `Reply-to: ${replyEmail}` : ""}
     const { data, error } = await resend.emails.send({
       from: "Florida Theranostics Referrals <onboarding@resend.dev>",
       to: [recipientEmail],
-      replyTo: replyEmail || undefined,
+      reply_to: replyEmail || undefined,
       subject: `New Referral: ${patientName} – ${referringPhysician}`,
       html,
       text,

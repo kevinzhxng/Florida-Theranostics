@@ -6,12 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:sanity": "node scripts/seed-sanity.mjs",
+    "seed:all": "node scripts/seed-all-pages.mjs"
   },
   "dependencies": {
+    "@sanity/client": "^6.22.5",
+    "@sanity/image-url": "^2.0.3",
+    "groq": "^3.3.0",
+    "next": "^14.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "next": "^14.2.0",
     "resend": "^3.2.0"
   },
   "devDependencies": {

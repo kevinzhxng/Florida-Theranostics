@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, useRef } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/animations/ScrollReveal";
@@ -10,8 +10,9 @@ const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
 declare global {
   interface Window {
     grecaptcha?: {
-      getResponse: () => string;
-      reset: () => void;
+      render: (container: string | HTMLElement, options: { sitekey: string; theme?: string; size?: string }) => number;
+      getResponse: (widgetId?: number) => string;
+      reset: (widgetId?: number) => void;
     };
   }
 }
@@ -54,25 +55,83 @@ export default function ContactForm({
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
+  const recaptchaContainerRef = useRef<HTMLDivElement>(null);
+  const recaptchaWidgetIdRef = useRef<number | null>(null);
 
+  // Load reCAPTCHA script with explicit render so we render the widget after our container is mounted
   useEffect(() => {
-    if (!RECAPTCHA_SITE_KEY) return;
-    if (typeof window !== "undefined" && document.querySelector('script[src*="google.com/recaptcha"]')) return;
+    if (!RECAPTCHA_SITE_KEY || typeof window === "undefined") return;
+    const existing = document.querySelector('script[src*="google.com/recaptcha/api.js"]');
+    if (existing) {
+      if (window.grecaptcha && recaptchaContainerRef.current && recaptchaWidgetIdRef.current === null) {
+        try {
+          recaptchaWidgetIdRef.current = window.grecaptcha.render(recaptchaContainerRef.current, {
+            sitekey: RECAPTCHA_SITE_KEY,
+            theme: "light",
+            size: "normal",
+          });
+        } catch {
+          // already rendered or other error
+        }
+      }
+      return;
+    }
     const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js";
+    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
     script.async = true;
     script.defer = true;
+    script.onload = () => {
+      if (recaptchaContainerRef.current && window.grecaptcha && recaptchaWidgetIdRef.current === null) {
+        try {
+          recaptchaWidgetIdRef.current = window.grecaptcha.render(recaptchaContainerRef.current, {
+            sitekey: RECAPTCHA_SITE_KEY,
+            theme: "light",
+            size: "normal",
+          });
+        } catch {
+          // ignore
+        }
+      }
+    };
     document.head.appendChild(script);
-  }, []);
+  }, [RECAPTCHA_SITE_KEY]);
+
+  // When container mounts after script is already loaded, render widget
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY || typeof window === "undefined") return;
+    if (!recaptchaContainerRef.current || !window.grecaptcha || recaptchaWidgetIdRef.current !== null) return;
+    const timer = setTimeout(() => {
+      if (recaptchaContainerRef.current && window.grecaptcha && recaptchaWidgetIdRef.current === null) {
+        try {
+          recaptchaWidgetIdRef.current = window.grecaptcha.render(recaptchaContainerRef.current, {
+            sitekey: RECAPTCHA_SITE_KEY,
+            theme: "light",
+            size: "normal",
+          });
+        } catch {
+          // ignore
+        }
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [RECAPTCHA_SITE_KEY]);
 
   const getRecaptchaToken = (): string => {
     if (typeof window === "undefined" || !window.grecaptcha?.getResponse) return "";
-    return window.grecaptcha.getResponse() ?? "";
+    try {
+      return window.grecaptcha.getResponse(recaptchaWidgetIdRef.current ?? undefined) ?? "";
+    } catch {
+      return "";
+    }
   };
 
   const resetRecaptcha = () => {
     if (typeof window !== "undefined" && window.grecaptcha?.reset) {
-      window.grecaptcha.reset();
+      try {
+        window.grecaptcha.reset(recaptchaWidgetIdRef.current ?? undefined);
+      } catch {
+        // ignore
+      }
     }
   };
 
@@ -241,13 +300,7 @@ export default function ContactForm({
                   <p className="mt-1 text-xs text-text-subtle font-sans">{formData.message.length}/{MAX_MESSAGE_LENGTH} characters</p>
                 </div>
                 {RECAPTCHA_SITE_KEY && (
-                  <div
-                    className="g-recaptcha"
-                    data-sitekey={RECAPTCHA_SITE_KEY}
-                    data-theme="light"
-                    data-size="normal"
-                    aria-label="reCAPTCHA"
-                  />
+                  <div ref={recaptchaContainerRef} aria-label="reCAPTCHA" />
                 )}
                 {submitStatus.type && (
                   <div className={`p-4 rounded-sm ${submitStatus.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"}`}>

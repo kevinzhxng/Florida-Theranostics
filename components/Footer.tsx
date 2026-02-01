@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Container from "./Container";
 import Image from "next/image";
+import FooterReveal from "./animations/FooterReveal";
 import type { SiteSettings } from "@/lib/types";
 
 const DEFAULT_NAV_LINKS: { label: string; href: string; isExternal?: boolean }[] = [
@@ -32,7 +33,8 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettings |
   return (
     <footer className="bg-navy text-warm-white">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 py-16 md:py-20">
+        <FooterReveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 py-16 md:py-20">
           <div>
             <Link href="/" className="flex items-center gap-3 mb-6">
               <Image
@@ -123,7 +125,8 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettings |
               <p>{hours}</p>
             </div>
           </div>
-        </div>
+          </div>
+        </FooterReveal>
         <div className="border-t border-warm-white/20 pt-8 pb-8">
           <p className="text-xs text-warm-white/60 text-center font-sans font-normal">
             © {currentYear} {copyrightText}

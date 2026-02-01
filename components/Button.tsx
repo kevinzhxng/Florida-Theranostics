@@ -14,7 +14,7 @@ export default function Button({
   className = "",
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center px-8 py-3.5 text-sm font-sans font-normal tracking-wide transition-all duration-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2 focus:ring-offset-warm-white";
+    "inline-flex items-center justify-center px-8 py-3.5 text-sm font-sans font-normal tracking-wide transition-all duration-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2 focus:ring-offset-warm-white hover:scale-[1.02] active:scale-[0.98]";
   
   const variants = {
     primary:

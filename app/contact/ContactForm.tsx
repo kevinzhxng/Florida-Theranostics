@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 
 const inputClass = "w-full px-4 py-2.5 border border-charcoal/20 bg-warm-white text-charcoal focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent transition-all font-sans text-sm";
 
@@ -59,8 +60,9 @@ export default function ContactForm({
 
   return (
     <Section className="py-10 md:py-14 bg-surface-cool">
-      <Container>
-        <div className="max-w-4xl mx-auto">
+      <ScrollReveal>
+        <Container>
+          <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
             <div>
               <h1 className="text-3xl md:text-4xl font-serif font-normal text-charcoal mb-4 leading-tight">
@@ -120,6 +122,7 @@ export default function ContactForm({
           </div>
         </div>
       </Container>
+      </ScrollReveal>
     </Section>
   );
 }

@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRef, useEffect } from "react";
 
 interface ImageTextSectionProps {
   title?: string;
@@ -19,7 +22,11 @@ export default function ImageTextSection({
   imageCredit,
   className = "",
 }: ImageTextSectionProps) {
-  // Parse title with _emphasis_ syntax
+  const sectionRef = useRef<HTMLElement>(null);
+  const imageColRef = useRef<HTMLDivElement>(null);
+  const textColRef = useRef<HTMLDivElement>(null);
+  const ctxRef = useRef<{ revert: () => void } | null>(null);
+
   const parseTitle = (text: string) => {
     const parts = text.split(/_/);
     return parts.map((part, index) => {
@@ -29,6 +36,61 @@ export default function ImageTextSection({
       return <span key={index}>{part}</span>;
     });
   };
+
+  useEffect(() => {
+    void (async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
+
+      const trigger = sectionRef.current;
+      if (!trigger) return;
+
+      ctxRef.current = gsap.context(() => {
+        const imageFromX = imagePosition === "left" ? 80 : -80;
+
+        if (imageColRef.current) {
+          gsap.fromTo(
+            imageColRef.current,
+            { x: imageFromX, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger,
+                start: "top 82%",
+                end: "top 40%",
+                scrub: 1,
+              },
+            }
+          );
+        }
+
+        if (textColRef.current) {
+          gsap.fromTo(
+            textColRef.current,
+            { y: 48, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger,
+                start: "top 82%",
+                end: "top 40%",
+                scrub: 1,
+              },
+            }
+          );
+        }
+      }, sectionRef);
+    })();
+
+    return () => {
+      ctxRef.current?.revert();
+    };
+  }, [imagePosition, title]);
 
   const imageComponent = imageSrc ? (
     <div className="relative w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
@@ -54,7 +116,10 @@ export default function ImageTextSection({
   );
 
   return (
-    <section className={`py-10 md:py-14 bg-warm-white ${className}`.trim()}>
+    <section
+      ref={sectionRef}
+      className={`py-10 md:py-14 bg-warm-white ${className}`.trim()}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className={`grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 items-center ${
@@ -63,11 +128,11 @@ export default function ImageTextSection({
               : ""
           }`}
         >
-          {/* Image */}
-          <div className="w-full">{imageComponent}</div>
+          <div ref={imageColRef} className="w-full">
+            {imageComponent}
+          </div>
 
-          {/* Text Content */}
-          <div className="flex flex-col justify-center">
+          <div ref={textColRef} className="flex flex-col justify-center">
             {title && (
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-8 md:mb-10 leading-tight">
                 {parseTitle(title)}

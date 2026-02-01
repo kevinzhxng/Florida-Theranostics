@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Testimonial {
   quote: string;
@@ -19,27 +23,83 @@ export default function TestimonialsSection({
   testimonials,
 }: TestimonialsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const ctxRef = useRef<{ revert: () => void } | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 5000); // Rotate every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
+  useEffect(() => {
+    void (async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
+
+      ctxRef.current = gsap.context(() => {
+        if (titleRef.current) {
+          gsap.fromTo(
+            titleRef.current,
+            { y: 48, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: titleRef.current,
+                start: "top 88%",
+                end: "top 55%",
+                scrub: 1,
+              },
+            }
+          );
+        }
+        if (carouselRef.current) {
+          gsap.fromTo(
+            carouselRef.current,
+            { y: 40, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: carouselRef.current,
+                start: "top 85%",
+                end: "top 45%",
+                scrub: 1,
+              },
+            }
+          );
+        }
+      }, sectionRef);
+    })();
+
+    return () => {
+      ctxRef.current?.revert();
+    };
+  }, [title]);
+
   return (
-    <Section className="py-10 md:py-14 bg-warm-white">
+    <Section ref={sectionRef} className="py-10 md:py-14 bg-warm-white">
       <Container>
         <div className="max-w-5xl mx-auto">
           {title && (
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
+            <h2
+              ref={titleRef}
+              className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight opacity-0"
+            >
               {title}
             </h2>
           )}
 
           {/* Carousel Container */}
-          <div className="relative overflow-hidden">
+          <div ref={carouselRef} className="relative overflow-hidden opacity-0">
             <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{

@@ -31,7 +31,7 @@ export const homePageQuery = groq`
     heroHeadline,
     heroCtaText,
     heroCtaHref,
-    heroVideoSrc,
+    heroVideo { asset->{ url } },
     featuresSectionTitle,
     features[] {
       title,

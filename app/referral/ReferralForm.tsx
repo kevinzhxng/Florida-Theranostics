@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 
 const inputClass =
   "w-full px-4 py-2.5 border border-charcoal/20 bg-warm-white text-charcoal focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent transition-all font-sans text-sm";
@@ -273,31 +274,34 @@ export default function ReferralForm({
   return (
     <>
       <Section className="py-6 md:py-8 bg-surface-cool">
-        <Container>
-          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-serif font-normal text-charcoal leading-tight">
-                {pageTitle}
-              </h1>
-              <p className="text-sm font-sans text-text-muted mt-1">
-                {pageSubtitle}
-              </p>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-serif font-normal text-charcoal leading-tight">
+                  {pageTitle}
+                </h1>
+                <p className="text-sm font-sans text-text-muted mt-1">
+                  {pageSubtitle}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-4 text-sm font-sans text-text-muted shrink-0">
+                {phoneNumbers.map((num, i) => (
+                  <a key={i} href={`tel:${num.replace(/\D/g, "")}`} className="hover:text-charcoal transition-colors">
+                    {num}
+                  </a>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-wrap gap-4 text-sm font-sans text-text-muted shrink-0">
-              {phoneNumbers.map((num, i) => (
-                <a key={i} href={`tel:${num.replace(/\D/g, "")}`} className="hover:text-charcoal transition-colors">
-                  {num}
-                </a>
-              ))}
-            </div>
-          </div>
-        </Container>
+          </Container>
+        </ScrollReveal>
       </Section>
 
       <Section className="py-10 md:py-14 bg-warm-white">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <form onSubmit={handleSubmit} className="space-y-10">
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <form onSubmit={handleSubmit} className="space-y-10">
               <div>
                 <h2 className="text-2xl font-serif font-normal text-charcoal mb-6 pb-2 border-b border-charcoal/10">
                   Patient Information
@@ -467,6 +471,7 @@ export default function ReferralForm({
             </form>
           </div>
         </Container>
+        </ScrollReveal>
       </Section>
     </>
   );

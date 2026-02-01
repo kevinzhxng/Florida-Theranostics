@@ -3,6 +3,7 @@ import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ImageTextSection from "@/components/ImageTextSection";
 import Button from "@/components/Button";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 import { client } from "@/lib/sanity";
 import { molecularImagingPageQuery, fetchOptions } from "@/lib/sanity/queries";
 import { getImageUrl } from "@/lib/sanity/helpers";
@@ -114,86 +115,96 @@ export default async function MolecularImagingPage() {
     <>
       <ImageTextSection title={heroTitle} content={<div className="space-y-6">{heroBody.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}</div>} imagePosition="right" imageSrc={heroImageSrc} imageAlt={heroTitle} />
       <Section className="py-10 md:py-14 bg-warm-white">
-        <Container>
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-6 leading-tight">{introTitle}</h2>
-            <p className="text-lg md:text-xl text-text-muted leading-loose">{introBody}</p>
-          </div>
-        </Container>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-6 leading-tight">{introTitle}</h2>
+              <p className="text-lg md:text-xl text-text-muted leading-loose">{introBody}</p>
+            </div>
+          </Container>
+        </ScrollReveal>
       </Section>
       <Section className="py-10 md:py-14 bg-warm-white">
-        <Container>
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-10 md:mb-12">
-              <h2 className="text-3xl md:text-4xl font-serif font-normal text-charcoal mb-2 leading-tight">{petCtTitle}</h2>
-              <p className="text-sm uppercase tracking-wider text-navy/80 font-sans">{petCtSubtitle}</p>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-7xl mx-auto">
+              <div className="mb-10 md:mb-12">
+                <h2 className="text-3xl md:text-4xl font-serif font-normal text-charcoal mb-2 leading-tight">{petCtTitle}</h2>
+                <p className="text-sm uppercase tracking-wider text-navy/80 font-sans">{petCtSubtitle}</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
+                {petCtModalities.map((modality, index) => (
+                  <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12 flex flex-col">
+                    {modality.imageSrc && (
+                      <div className="relative w-full aspect-[2/1] mb-6 overflow-hidden bg-gray-100 rounded-sm">
+                        <Image src={modality.imageSrc} alt={modality.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                      </div>
+                    )}
+                    <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{modality.name}</h3>
+                    <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{modality.subtitle}</p>
+                    <p className="text-lg text-text-muted leading-loose">{modality.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
-              {petCtModalities.map((modality, index) => (
-                <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12 flex flex-col">
-                  {modality.imageSrc && (
-                    <div className="relative w-full aspect-[2/1] mb-6 overflow-hidden bg-gray-100 rounded-sm">
-                      <Image src={modality.imageSrc} alt={modality.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
-                    </div>
-                  )}
-                  <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{modality.name}</h3>
-                  <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{modality.subtitle}</p>
-                  <p className="text-lg text-text-muted leading-loose">{modality.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
+          </Container>
+        </ScrollReveal>
       </Section>
       <Section className="py-10 md:py-14 bg-warm-white">
-        <Container>
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-10 md:mb-12">
-              <h2 className="text-3xl md:text-4xl font-serif font-normal text-charcoal mb-2 leading-tight">{spectCtTitle}</h2>
-              <p className="text-lg text-text-muted leading-loose max-w-3xl">{spectCtIntro}</p>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-7xl mx-auto">
+              <div className="mb-10 md:mb-12">
+                <h2 className="text-3xl md:text-4xl font-serif font-normal text-charcoal mb-2 leading-tight">{spectCtTitle}</h2>
+                <p className="text-lg text-text-muted leading-loose max-w-3xl">{spectCtIntro}</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+                {spectCtModalities.map((modality, index) => (
+                  <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12 flex flex-col">
+                    {modality.imageSrc && (
+                      <div className="relative w-full aspect-[2/1] mb-6 overflow-hidden bg-gray-100 rounded-sm">
+                        <Image src={modality.imageSrc} alt={modality.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+                      </div>
+                    )}
+                    <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{modality.name}</h3>
+                    <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{modality.subtitle}</p>
+                    <p className="text-lg text-text-muted leading-loose">{modality.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-              {spectCtModalities.map((modality, index) => (
-                <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12 flex flex-col">
-                  {modality.imageSrc && (
-                    <div className="relative w-full aspect-[2/1] mb-6 overflow-hidden bg-gray-100 rounded-sm">
-                      <Image src={modality.imageSrc} alt={modality.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
-                    </div>
-                  )}
-                  <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{modality.name}</h3>
-                  <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{modality.subtitle}</p>
-                  <p className="text-lg text-text-muted leading-loose">{modality.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
+          </Container>
+        </ScrollReveal>
       </Section>
       <ImageTextSection title={precisionTitle} content={<div className="space-y-6">{precisionBody.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}</div>} imagePosition="left" imageSrc={precisionImageSrc} imageAlt={precisionTitle} />
       <Section className="py-10 md:py-14 bg-warm-white">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-8 md:mb-10 leading-tight">{dynamicPetTitle}</h2>
-            <p className="text-lg md:text-xl text-text-muted leading-loose mb-8">{dynamicPetIntro}</p>
-            <ul className="space-y-3 text-lg text-text-muted leading-relaxed list-none">
-              {dynamicPetBullets.map((bullet, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="text-navy shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-navy" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Container>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-8 md:mb-10 leading-tight">{dynamicPetTitle}</h2>
+              <p className="text-lg md:text-xl text-text-muted leading-loose mb-8">{dynamicPetIntro}</p>
+              <ul className="space-y-3 text-lg text-text-muted leading-relaxed list-none">
+                {dynamicPetBullets.map((bullet, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="text-navy shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-navy" />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </ScrollReveal>
       </Section>
       <Section className="py-10 md:py-14 bg-charcoal">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-6 leading-tight">{ctaTitle}</h2>
-            <p className="text-lg md:text-xl text-warm-white/80 leading-loose mb-10">{ctaBody}</p>
-            <Button href={ctaButtonHref} variant="primary" className="!bg-warm-white !text-charcoal hover:!bg-warm-white/90">{ctaButtonLabel}</Button>
-          </div>
-        </Container>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-6 leading-tight">{ctaTitle}</h2>
+              <p className="text-lg md:text-xl text-warm-white/80 leading-loose mb-10">{ctaBody}</p>
+              <Button href={ctaButtonHref} variant="primary" className="!bg-warm-white !text-charcoal hover:!bg-warm-white/90">{ctaButtonLabel}</Button>
+            </div>
+          </Container>
+        </ScrollReveal>
       </Section>
     </>
   );

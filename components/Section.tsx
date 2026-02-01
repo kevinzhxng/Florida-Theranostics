@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 
 interface SectionProps {
   children: ReactNode;
@@ -6,11 +6,10 @@ interface SectionProps {
   variant?: "default" | "subtle";
 }
 
-export default function Section({
-  children,
-  className = "",
-  variant = "default",
-}: SectionProps) {
+const Section = forwardRef<HTMLElement, SectionProps>(function Section(
+  { children, className = "", variant = "default" },
+  ref
+) {
   const baseStyles = "w-full";
   const variantStyles = {
     default: "",
@@ -18,8 +17,13 @@ export default function Section({
   };
 
   return (
-    <section className={`${baseStyles} ${variantStyles[variant]} ${className}`}>
+    <section
+      ref={ref}
+      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
+    >
       {children}
     </section>
   );
-}
+});
+
+export default Section;

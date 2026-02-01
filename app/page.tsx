@@ -34,7 +34,7 @@ export default async function Home() {
   let heroHeadline = "Setting the Standard in Molecular imaging and Theranostics";
   let heroCtaText = "Schedule a Consultation";
   let heroCtaHref = "/contact";
-  let heroVideoSrc = "/videos/Florida Theranostics Video 1.mp4";
+  let heroVideoUrl: string | undefined = "/videos/Florida Theranostics Video 1.mp4";
   let featuresSectionTitle = "Smart Diagnostics, Customized Solutions";
   let features = DEFAULT_FEATURES;
   let sections = DEFAULT_SECTIONS;
@@ -47,7 +47,7 @@ export default async function Home() {
         heroHeadline?: string | null;
         heroCtaText?: string | null;
         heroCtaHref?: string | null;
-        heroVideoSrc?: string | null;
+        heroVideo?: { asset?: { url?: string | null } | null } | null;
         featuresSectionTitle?: string | null;
         features?: Array<{ title?: string; description?: string; image?: unknown; href?: string }> | null;
         sections?: Array<{ title?: string; body?: string; imagePosition?: string; image?: unknown; buttonLabel?: string; buttonHref?: string }> | null;
@@ -59,7 +59,7 @@ export default async function Home() {
         if (data.heroHeadline) heroHeadline = data.heroHeadline;
         if (data.heroCtaText) heroCtaText = data.heroCtaText;
         if (data.heroCtaHref) heroCtaHref = data.heroCtaHref;
-        if (data.heroVideoSrc) heroVideoSrc = data.heroVideoSrc;
+        if (data.heroVideo?.asset?.url) heroVideoUrl = data.heroVideo.asset.url;
         if (data.featuresSectionTitle) featuresSectionTitle = data.featuresSectionTitle;
         if (data.testimonialsSectionTitle) testimonialsSectionTitle = data.testimonialsSectionTitle;
         if (data.features?.length) {
@@ -98,7 +98,7 @@ export default async function Home() {
     <>
       <div className="-mt-24 md:-mt-28">
         <HeroSection
-          videoSrc={heroVideoSrc || undefined}
+          videoSrc={heroVideoUrl || undefined}
           headline={heroHeadline}
           ctaText={heroCtaText}
           ctaHref={heroCtaHref}

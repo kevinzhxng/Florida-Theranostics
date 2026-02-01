@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 
 interface TeamMember {
   name: string;
@@ -21,8 +22,9 @@ export default function TeamSection({
 }: TeamSectionProps) {
   return (
     <Section className="py-10 md:py-14 bg-warm-white">
-      <Container>
-        <div className="max-w-7xl mx-auto">
+      <ScrollReveal>
+        <Container>
+          <div className="max-w-7xl mx-auto">
           {title && (
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
               {title}
@@ -67,6 +69,7 @@ export default function TeamSection({
           </div>
         </div>
       </Container>
+      </ScrollReveal>
     </Section>
   );
 }

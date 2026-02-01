@@ -4,6 +4,7 @@ import Section from "@/components/Section";
 import ImageTextSection from "@/components/ImageTextSection";
 import TeamSection from "@/components/TeamSection";
 import Button from "@/components/Button";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 import { client } from "@/lib/sanity";
 import { aboutPageQuery, siteSettingsQuery, fetchOptions } from "@/lib/sanity/queries";
 import { mapTeamMember, mapValues, getImageUrl } from "@/lib/sanity/helpers";
@@ -165,66 +166,70 @@ export default async function AboutUs() {
 
       {/* Our Values */}
       <Section className="py-10 md:py-14 bg-surface-cool">
-        <Container>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
-              Our Values
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-              {values.map((value, index) => (
-                <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12">
-                  <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-4 leading-tight">
-                    {value.title}
-                  </h3>
-                  <p className="text-lg text-text-muted leading-loose">
-                    {value.description}
-                  </p>
-                </div>
-              ))}
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
+                Our Values
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+                {values.map((value, index) => (
+                  <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12">
+                    <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-4 leading-tight">
+                      {value.title}
+                    </h3>
+                    <p className="text-lg text-text-muted leading-loose">
+                      {value.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </ScrollReveal>
       </Section>
 
       {/* Chief Physician and Founder */}
       <Section className="py-10 md:py-14 bg-warm-white">
-        <Container>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-10 md:mb-12 text-center leading-tight">
-              Meet The Team
-            </h2>
-            <p className="text-center text-lg text-text-muted max-w-2xl mx-auto mb-12 md:mb-14">
-              Our team is committed to providing the highest quality care. We encourage you to ask questions and speak freely with us about your concerns and needs.
-            </p>
-            <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-6 md:mb-8 uppercase tracking-wider text-navy/90">
-              Chief Physician and Founder
-            </h3>
-            <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start bg-warm-white border border-charcoal/10 overflow-hidden">
-              <div className="w-full md:w-80 lg:w-96 shrink-0">
-                <div className="relative w-full aspect-[3/4] bg-gray-100">
-                  <Image
-                    src={chiefPhysician.imageSrc}
-                    alt={chiefPhysician.imageAlt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 384px"
-                  />
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-10 md:mb-12 text-center leading-tight">
+                Meet The Team
+              </h2>
+              <p className="text-center text-lg text-text-muted max-w-2xl mx-auto mb-12 md:mb-14">
+                Our team is committed to providing the highest quality care. We encourage you to ask questions and speak freely with us about your concerns and needs.
+              </p>
+              <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-6 md:mb-8 uppercase tracking-wider text-navy/90">
+                Chief Physician and Founder
+              </h3>
+              <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start bg-warm-white border border-charcoal/10 overflow-hidden">
+                <div className="w-full md:w-80 lg:w-96 shrink-0">
+                  <div className="relative w-full aspect-[3/4] bg-gray-100">
+                    <Image
+                      src={chiefPhysician.imageSrc}
+                      alt={chiefPhysician.imageAlt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 384px"
+                    />
+                  </div>
+                </div>
+                <div className="p-6 md:p-8 lg:p-10 flex flex-col flex-grow">
+                  <h4 className="text-2xl md:text-3xl font-serif font-normal text-charcoal mb-1 leading-tight">
+                    {chiefPhysician.name}
+                  </h4>
+                  <p className="text-sm uppercase tracking-wider text-navy font-sans mb-6">
+                    {chiefPhysician.title}
+                  </p>
+                  <p className="text-base md:text-lg text-text-muted leading-relaxed">
+                    {chiefPhysician.bio}
+                  </p>
                 </div>
               </div>
-              <div className="p-6 md:p-8 lg:p-10 flex flex-col flex-grow">
-                <h4 className="text-2xl md:text-3xl font-serif font-normal text-charcoal mb-1 leading-tight">
-                  {chiefPhysician.name}
-                </h4>
-                <p className="text-sm uppercase tracking-wider text-navy font-sans mb-6">
-                  {chiefPhysician.title}
-                </p>
-                <p className="text-base md:text-lg text-text-muted leading-relaxed">
-                  {chiefPhysician.bio}
-                </p>
-              </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </ScrollReveal>
       </Section>
 
       {/* Staff */}
@@ -232,9 +237,10 @@ export default async function AboutUs() {
 
       {/* CTA */}
       <Section className="py-10 md:py-14 bg-charcoal">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-8 leading-tight">
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-8 leading-tight">
               {ctaTitle}
             </h2>
             {ctaBody && (
@@ -280,6 +286,7 @@ export default async function AboutUs() {
             </div>
           </div>
         </Container>
+        </ScrollReveal>
       </Section>
     </>
   );

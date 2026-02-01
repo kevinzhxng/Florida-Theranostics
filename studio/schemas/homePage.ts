@@ -34,11 +34,14 @@ export const homePage = defineType({
       initialValue: "/contact",
     }),
     defineField({
-      name: "heroVideoSrc",
-      title: "Hero video path",
-      type: "string",
+      name: "heroVideo",
+      title: "Hero video",
+      type: "file",
       group: "hero",
-      description: "e.g. /videos/Florida Theranostics Video 1.mp4",
+      options: {
+        accept: "video/*",
+      },
+      description: "Drag and drop a video file (e.g. MP4). Shown in the hero section.",
     }),
     // Features
     defineField({

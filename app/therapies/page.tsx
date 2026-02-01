@@ -2,6 +2,7 @@ import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ImageTextSection from "@/components/ImageTextSection";
 import Button from "@/components/Button";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 import { client } from "@/lib/sanity";
 import { therapiesPageQuery, fetchOptions } from "@/lib/sanity/queries";
 import { getImageUrl } from "@/lib/sanity/helpers";
@@ -93,22 +94,24 @@ export default async function TherapiesPage() {
         imageAlt={heroTitle}
       />
       <Section className="py-10 md:py-14 bg-surface-cool">
-        <Container>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
-              {therapiesSectionTitle}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-              {therapiesList.map((therapy, index) => (
-                <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12">
-                  <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{therapy.name}</h3>
-                  <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{therapy.subtitle}</p>
-                  <p className="text-lg text-text-muted leading-loose">{therapy.description}</p>
-                </div>
-              ))}
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight">
+                {therapiesSectionTitle}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+                {therapiesList.map((therapy, index) => (
+                  <div key={index} className="border-b border-charcoal/10 pb-10 md:pb-12">
+                    <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{therapy.name}</h3>
+                    <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{therapy.subtitle}</p>
+                    <p className="text-lg text-text-muted leading-loose">{therapy.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </ScrollReveal>
       </Section>
       {prrtTitle && (
         <ImageTextSection
@@ -133,31 +136,35 @@ export default async function TherapiesPage() {
         />
       )}
       <Section className="py-10 md:py-14 bg-surface-cool">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-8 md:mb-10 leading-tight">{goalTitle}</h2>
-            <p className="text-lg md:text-xl text-text-muted leading-loose mb-8">{goalIntro}</p>
-            <ul className="space-y-4 text-lg text-text-muted leading-loose list-none">
-              {goalBullets.map((bullet, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="text-navy shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-navy" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Container>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-8 md:mb-10 leading-tight">{goalTitle}</h2>
+              <p className="text-lg md:text-xl text-text-muted leading-loose mb-8">{goalIntro}</p>
+              <ul className="space-y-4 text-lg text-text-muted leading-loose list-none">
+                {goalBullets.map((bullet, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="text-navy shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-navy" />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </ScrollReveal>
       </Section>
       <Section className="py-10 md:py-14 bg-charcoal">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-6 leading-tight">{ctaTitle}</h2>
-            <p className="text-lg md:text-xl text-warm-white/80 leading-loose mb-10">{ctaBody}</p>
-            <Button href={ctaButtonHref} variant="primary" className="!bg-warm-white !text-charcoal hover:!bg-warm-white/90">
-              {ctaButtonLabel}
-            </Button>
-          </div>
-        </Container>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-6 leading-tight">{ctaTitle}</h2>
+              <p className="text-lg md:text-xl text-warm-white/80 leading-loose mb-10">{ctaBody}</p>
+              <Button href={ctaButtonHref} variant="primary" className="!bg-warm-white !text-charcoal hover:!bg-warm-white/90">
+                {ctaButtonLabel}
+              </Button>
+            </div>
+          </Container>
+        </ScrollReveal>
       </Section>
     </>
   );

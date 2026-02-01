@@ -43,6 +43,7 @@ const client = createClient({
 });
 
 const headshotsDir = path.join(root, "public", "images", "headshots");
+const videosDir = path.join(root, "public", "videos");
 
 function uploadImage(filename, dir = headshotsDir) {
   const filePath = path.join(dir, filename);
@@ -52,6 +53,16 @@ function uploadImage(filename, dir = headshotsDir) {
   }
   const buffer = fs.readFileSync(filePath);
   return client.assets.upload("image", buffer, { filename });
+}
+
+function uploadVideo(filename, dir = videosDir) {
+  const filePath = path.join(dir, filename);
+  if (!fs.existsSync(filePath)) {
+    console.warn("Missing video:", filePath);
+    return null;
+  }
+  const buffer = fs.readFileSync(filePath);
+  return client.assets.upload("file", buffer, { filename });
 }
 
 async function seed() {
@@ -145,13 +156,15 @@ async function seed() {
   console.log("Created: aboutPage\n");
 
   // —— 4. Home Page ——
+  const heroVideoFile = "Florida Theranostics Video 1.mp4";
+  const heroVideoAsset = await uploadVideo(heroVideoFile);
   await client.createOrReplace({
     _id: "homePage",
     _type: "homePage",
     heroHeadline: "Setting the Standard in Molecular imaging and Theranostics",
     heroCtaText: "Schedule a Consultation",
     heroCtaHref: "/contact",
-    heroVideoSrc: "/videos/Florida Theranostics Video 1.mp4",
+    ...(heroVideoAsset && { heroVideo: { _type: "file", asset: { _type: "reference", _ref: heroVideoAsset._id } } }),
     featuresSectionTitle: "Smart Diagnostics, Customized Solutions",
     features: [
       { title: "Ultrafast PET Imaging", description: "Offers unparalleled diagnostic precision.", href: "/molecular-imaging" },

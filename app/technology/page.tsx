@@ -2,6 +2,7 @@ import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ImageTextSection from "@/components/ImageTextSection";
 import Button from "@/components/Button";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 import { client } from "@/lib/sanity";
 import { technologyPageQuery, fetchOptions } from "@/lib/sanity/queries";
 import { getImageUrl } from "@/lib/sanity/helpers";
@@ -117,15 +118,17 @@ export default async function TechnologyPage() {
         imageAlt={section2Title}
       />
       <Section className="py-10 md:py-14 bg-charcoal">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-6 leading-tight">{ctaTitle}</h2>
-            <p className="text-lg md:text-xl text-warm-white/80 leading-loose mb-10">{ctaBody}</p>
-            <Button href={ctaButtonHref} variant="primary" className="!bg-warm-white !text-charcoal hover:!bg-warm-white/90">
-              {ctaButtonLabel}
-            </Button>
-          </div>
-        </Container>
+        <ScrollReveal>
+          <Container>
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-warm-white mb-6 leading-tight">{ctaTitle}</h2>
+              <p className="text-lg md:text-xl text-warm-white/80 leading-loose mb-10">{ctaBody}</p>
+              <Button href={ctaButtonHref} variant="primary" className="!bg-warm-white !text-charcoal hover:!bg-warm-white/90">
+                {ctaButtonLabel}
+              </Button>
+            </div>
+          </Container>
+        </ScrollReveal>
       </Section>
     </>
   );

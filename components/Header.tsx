@@ -18,6 +18,7 @@ const DEFAULT_NAV_LINKS = [
 export default function Header({ siteSettings }: { siteSettings?: SiteSettings | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
 
@@ -35,7 +36,11 @@ export default function Header({ siteSettings }: { siteSettings?: SiteSettings |
     });
   }, []);
 
-  const isLight = !isHomepage || scrolled || isHovered;
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  const isLight = !isHomepage || scrolled || isHovered || isMobileMenuOpen;
   const navLinks = (siteSettings?.navMainLinks?.length ? siteSettings.navMainLinks : DEFAULT_NAV_LINKS).filter(
     (l) => l?.label && l?.href
   );
@@ -148,17 +153,89 @@ export default function Header({ siteSettings }: { siteSettings?: SiteSettings |
             </Link>
           </div>
           <button
-            className={`lg:hidden transition-colors ${
+            type="button"
+            className={`lg:hidden p-2 -mr-2 transition-colors rounded ${
               isLight ? "text-text-muted hover:text-charcoal" : "text-white/90 hover:text-white"
             }`}
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            {isMobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
         </nav>
       </Container>
+      {/* Mobile menu panel */}
+      <div
+        className={`lg:hidden absolute top-full left-0 right-0 overflow-hidden transition-all duration-300 ease-out ${
+          isMobileMenuOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+        }`}
+        aria-hidden={!isMobileMenuOpen}
+      >
+        <div className="bg-warm-white border-b border-gray-200/50 shadow-lg">
+          <Container className="py-4">
+            <nav className="flex flex-col gap-1">
+              {navLinks.map((link, i) => {
+                const href = link.href ?? "#";
+                const isActive =
+                  pathname === href || (href !== "/" && pathname.startsWith(href));
+                const baseClasses =
+                  "block py-3 px-4 rounded-sm text-sm font-sans font-medium transition-colors text-charcoal hover:bg-gray-100";
+                const activeClasses = isActive ? "bg-gray-100 font-semibold" : "";
+                if (link.isExternal) {
+                  return (
+                    <a
+                      key={i}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${baseClasses} ${activeClasses}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </a>
+                  );
+                }
+                return (
+                  <Link
+                    key={i}
+                    href={href}
+                    className={`${baseClasses} ${activeClasses}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+              <div className="border-t border-gray-200 my-2" />
+              <a
+                href={patientPortalHref}
+                target="_blank"
+                rel="nopener noreferrer"
+                className="block py-3 px-4 rounded-sm text-sm font-sans font-medium text-charcoal hover:bg-gray-100 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {patientPortalLabel}
+              </a>
+              <Link
+                href="/contact"
+                className="block py-3 px-4 rounded-sm text-sm font-sans font-medium bg-navy text-warm-white hover:bg-navy-light transition-colors text-center mt-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {contactLabel}
+              </Link>
+            </nav>
+          </Container>
+        </div>
+      </div>
     </header>
   );
 }

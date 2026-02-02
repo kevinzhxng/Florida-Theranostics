@@ -73,8 +73,8 @@ export default async function Home() {
         } else if (data.heroHeadline?.trim()) {
           heroHeadlines = [data.heroHeadline.trim()];
         }
-        if (data.heroCtaText) heroCtaText = data.heroCtaText;
-        if (data.heroCtaHref) heroCtaHref = data.heroCtaHref;
+        if (data.heroCtaText?.trim()) heroCtaText = data.heroCtaText.trim();
+        if (data.heroCtaHref?.trim()) heroCtaHref = data.heroCtaHref.trim();
         if (data.heroVideo?.asset?.url) heroVideoUrl = data.heroVideo.asset.url;
         if (data.featuresSectionTitle) featuresSectionTitle = data.featuresSectionTitle;
         if (data.testimonialsSectionTitle) testimonialsSectionTitle = data.testimonialsSectionTitle;

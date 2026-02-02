@@ -86,22 +86,22 @@ export default function TestimonialsSection({
   }, [title]);
 
   return (
-    <Section ref={sectionRef} className="py-10 md:py-14 bg-warm-white">
-      <Container>
-        <div className="max-w-5xl mx-auto">
+    <Section ref={sectionRef} className="py-10 md:py-14 bg-warm-white overflow-x-hidden">
+      <Container className="w-full min-w-0">
+        <div className="max-w-5xl mx-auto w-full min-w-0">
           {title && (
             <h2
               ref={titleRef}
-              className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-12 md:mb-16 text-center leading-tight opacity-0"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-charcoal mb-8 sm:mb-12 md:mb-16 text-center leading-tight opacity-0 px-1"
             >
               {title}
             </h2>
           )}
 
           {/* Carousel Container */}
-          <div ref={carouselRef} className="relative overflow-hidden opacity-0">
+          <div ref={carouselRef} className="relative overflow-hidden opacity-0 w-full min-w-0">
             <div
-              className="flex transition-transform duration-700 ease-in-out"
+              className="flex transition-transform duration-700 ease-in-out w-full min-w-0"
               style={{
                 transform: `translateX(-${currentIndex * 100}%)`,
               }}
@@ -109,16 +109,16 @@ export default function TestimonialsSection({
               {testimonials.map((testimonial, index) => (
                 <div
                   key={index}
-                  className="min-w-full px-4 md:px-8 flex-shrink-0"
+                  className="min-w-full w-full flex-shrink-0 px-2 sm:px-4 md:px-8 box-border"
                 >
-                  <div className="flex flex-col items-center text-center space-y-6">
-                    <div className="text-5xl md:text-6xl text-navy/20 font-serif leading-none">
+                  <div className="flex flex-col items-center text-center space-y-4 sm:space-y-6 w-full min-w-0">
+                    <div className="text-4xl sm:text-5xl md:text-6xl text-navy/20 font-serif leading-none flex-shrink-0">
                       &ldquo;
                     </div>
-                    <p className="text-xl md:text-2xl text-text-muted leading-loose max-w-4xl">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-text-muted leading-relaxed max-w-4xl w-full min-w-0 px-2 sm:px-0">
                       {testimonial.quote}
                     </p>
-                    <p className="text-base md:text-lg font-sans font-medium text-charcoal mt-4">
+                    <p className="text-sm sm:text-base md:text-lg font-sans font-medium text-charcoal mt-2 sm:mt-4">
                       {testimonial.author}
                     </p>
                   </div>
@@ -128,7 +128,7 @@ export default function TestimonialsSection({
           </div>
 
           {/* Navigation Dots */}
-          <div className="flex justify-center gap-2 mt-12">
+          <div className="flex justify-center gap-2 mt-8 sm:mt-12 flex-wrap">
             {testimonials.map((_, index) => (
               <button
                 key={index}

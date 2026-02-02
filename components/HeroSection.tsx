@@ -27,7 +27,6 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const ctaRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
   const hasMountedRef = useRef(false);
   const ctxRef = useRef<{ revert: () => void } | null>(null);
@@ -63,17 +62,9 @@ export default function HeroSection({
         if (headlineRef.current) {
           (gsap.fromTo as (t: unknown, fromV: object, toV: object, pos?: number) => unknown)(
             headlineRef.current,
-            { y: 72, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" },
+            { y: 32, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
             0.3
-          );
-        }
-        if (ctaRef.current) {
-          (gsap.fromTo as (t: unknown, fromV: object, toV: object, pos?: number) => unknown)(
-            ctaRef.current,
-            { y: 28, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-            0.6
           );
         }
       }, containerRef);
@@ -136,21 +127,22 @@ export default function HeroSection({
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      <div className="relative z-10 h-full flex items-end justify-center pb-16 md:pb-20 lg:pb-24">
+      <div className="relative z-10 h-full flex items-end justify-center pb-20 md:pb-24 lg:pb-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1
             ref={headlineRef}
-            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-normal text-white leading-[1.1] mb-6 md:mb-8 opacity-0"
+            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-normal text-white leading-[1.15] mb-8 md:mb-10 lg:mb-12 opacity-0"
           >
             {parseHeadline(currentHeadline)}
           </h1>
-          <Link
-            ref={ctaRef}
-            href={ctaHref}
-            className="inline-block text-sm md:text-lg font-sans font-semibold text-white border-b border-white/50 hover:border-white transition-colors duration-300 tracking-wide opacity-0"
-          >
-            {ctaText}
-          </Link>
+          {(ctaText?.trim() && ctaHref) ? (
+            <Link
+              href={ctaHref}
+              className="inline-block text-sm md:text-lg font-sans font-semibold text-white border-b border-white/50 hover:border-white transition-colors duration-300 tracking-wide"
+            >
+              {ctaText}
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>

@@ -14,6 +14,7 @@ const dataset =
 
 const previewOrigin =
   process.env.SANITY_STUDIO_PREVIEW_ORIGIN || "http://localhost:3000";
+const isProduction = previewOrigin.startsWith("https://");
 
 export default defineConfig({
   name: "florida-theranostics",
@@ -128,7 +129,9 @@ export default defineConfig({
       previewUrl: {
         initial: `${previewOrigin}/`,
       },
-      allowOrigins: ["http://localhost:*"],
+      allowOrigins: isProduction
+        ? [previewOrigin, "https://*.vercel.app"]
+        : ["http://localhost:*"],
       resolve: {
         mainDocuments: defineDocuments([
           { route: "/", type: "homePage" },

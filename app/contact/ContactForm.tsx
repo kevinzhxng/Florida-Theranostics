@@ -57,63 +57,86 @@ export default function ContactForm({
   const [submitStatus, setSubmitStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
   const recaptchaWidgetIdRef = useRef<number | null>(null);
+  const scriptLoadedRef = useRef(false);
 
-  // Load reCAPTCHA script with explicit render so we render the widget after our container is mounted
+  const tryRenderRecaptcha = () => {
+    if (recaptchaWidgetIdRef.current !== null) return;
+    const container = recaptchaContainerRef.current;
+    if (!container || !window.grecaptcha?.render) return false;
+    try {
+      recaptchaWidgetIdRef.current = window.grecaptcha.render(container, {
+        sitekey: RECAPTCHA_SITE_KEY,
+        theme: "light",
+        size: "normal",
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  // Load reCAPTCHA script
   useEffect(() => {
     if (!RECAPTCHA_SITE_KEY || typeof window === "undefined") return;
-    const existing = document.querySelector('script[src*="google.com/recaptcha/api.js"]');
-    if (existing) {
-      if (window.grecaptcha && recaptchaContainerRef.current && recaptchaWidgetIdRef.current === null) {
-        try {
-          recaptchaWidgetIdRef.current = window.grecaptcha.render(recaptchaContainerRef.current, {
-            sitekey: RECAPTCHA_SITE_KEY,
-            theme: "light",
-            size: "normal",
-          });
-        } catch {
-          // already rendered or other error
-        }
-      }
+
+    const scriptSrc = "https://www.google.com/recaptcha/api.js?render=explicit";
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${scriptSrc}"]`);
+    if (!script) {
+      script = document.createElement("script");
+      script.src = scriptSrc;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    const onScriptLoad = () => {
+      scriptLoadedRef.current = true;
+    };
+
+    if (window.grecaptcha?.render) {
+      scriptLoadedRef.current = true;
       return;
     }
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      if (recaptchaContainerRef.current && window.grecaptcha && recaptchaWidgetIdRef.current === null) {
-        try {
-          recaptchaWidgetIdRef.current = window.grecaptcha.render(recaptchaContainerRef.current, {
-            sitekey: RECAPTCHA_SITE_KEY,
-            theme: "light",
-            size: "normal",
-          });
-        } catch {
-          // ignore
-        }
-      }
-    };
-    document.head.appendChild(script);
+    script.addEventListener("load", onScriptLoad);
+    return () => script?.removeEventListener("load", onScriptLoad);
   }, [RECAPTCHA_SITE_KEY]);
 
-  // When container mounts after script is already loaded, render widget
+  // Render reCAPTCHA only when container is in view (form is inside ScrollReveal which starts at opacity 0)
   useEffect(() => {
     if (!RECAPTCHA_SITE_KEY || typeof window === "undefined") return;
-    if (!recaptchaContainerRef.current || !window.grecaptcha || recaptchaWidgetIdRef.current !== null) return;
-    const timer = setTimeout(() => {
-      if (recaptchaContainerRef.current && window.grecaptcha && recaptchaWidgetIdRef.current === null) {
-        try {
-          recaptchaWidgetIdRef.current = window.grecaptcha.render(recaptchaContainerRef.current, {
-            sitekey: RECAPTCHA_SITE_KEY,
-            theme: "light",
-            size: "normal",
-          });
-        } catch {
-          // ignore
+    const container = recaptchaContainerRef.current;
+    if (!container || typeof window.IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry?.isIntersecting || recaptchaWidgetIdRef.current !== null) return;
+        if (scriptLoadedRef.current && window.grecaptcha?.render) {
+          tryRenderRecaptcha();
         }
-      }
-    }, 100);
-    return () => clearTimeout(timer);
+      },
+      { threshold: 0.1, rootMargin: "80px" }
+    );
+
+    // If script loads after we're already in view, render then (stops after ~10s or when rendered)
+    let attempts = 0;
+    const maxAttempts = 50;
+    const checkAndRender = () => {
+      if (recaptchaWidgetIdRef.current !== null || !scriptLoadedRef.current || attempts >= maxAttempts) return;
+      attempts += 1;
+      const el = recaptchaContainerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inView) tryRenderRecaptcha();
+    };
+
+    observer.observe(container);
+    const t = setInterval(checkAndRender, 200);
+    return () => {
+      observer.disconnect();
+      clearInterval(t);
+    };
   }, [RECAPTCHA_SITE_KEY]);
 
   const getRecaptchaToken = (): string => {

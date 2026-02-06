@@ -14,7 +14,7 @@ So the Studio’s **“Preview website”** tab shows your Vercel site instead o
 - Set the preview origin to your live site:
 
 ```env
-SANITY_STUDIO_PROJECT_ID=a9vnfj40
+SANITY_STUDIO_PROJECT_ID=your_project_id
 SANITY_STUDIO_DATASET=production
 SANITY_STUDIO_PREVIEW_ORIGIN=https://florida-theranostics.vercel.app
 ```
@@ -59,7 +59,7 @@ npm install
 In **`studio/.env`** set:
 
 ```env
-SANITY_STUDIO_PROJECT_ID=a9vnfj40
+SANITY_STUDIO_PROJECT_ID=your_project_id
 SANITY_STUDIO_DATASET=production
 SANITY_STUDIO_PREVIEW_ORIGIN=https://florida-theranostics.vercel.app
 ```

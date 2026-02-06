@@ -47,7 +47,7 @@ export default function HeroSection({
     });
   };
 
-  // Initial entrance: video + headline + CTA
+  // Initial entrance: video only (headline shows without slide-up on refresh)
   useEffect(() => {
     void (async () => {
       const { gsap } = await import("gsap");
@@ -57,14 +57,6 @@ export default function HeroSection({
             videoRef.current,
             { scale: 1.08 },
             { scale: 1, duration: 2, ease: "power2.inOut" }
-          );
-        }
-        if (headlineRef.current) {
-          (gsap.fromTo as (t: unknown, fromV: object, toV: object, pos?: number) => unknown)(
-            headlineRef.current,
-            { y: 32, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
-            0.3
           );
         }
       }, containerRef);
@@ -131,7 +123,7 @@ export default function HeroSection({
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1
             ref={headlineRef}
-            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-normal text-white leading-[1.15] mb-8 md:mb-10 lg:mb-12 opacity-0"
+            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-normal text-white leading-[1.15] mb-4 md:mb-6 lg:mb-8"
           >
             {parseHeadline(currentHeadline)}
           </h1>

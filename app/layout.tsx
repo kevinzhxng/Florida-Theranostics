@@ -22,6 +22,9 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: "Florida Theranostics",
   description: "Premium concierge medicine and theranostics services in Florida",
+  icons: {
+    icon: "/images/logo/florida theranostics logo.png",
+  },
 };
 
 export default async function RootLayout({

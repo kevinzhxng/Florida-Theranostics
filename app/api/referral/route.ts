@@ -3,6 +3,19 @@ import { Resend } from "resend";
 import { escapeHtml, sanitizeFilename } from "@/lib/security";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
+
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  if (!RECAPTCHA_SECRET) return true;
+  if (!token) return false;
+  const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: token }),
+  });
+  const data = (await res.json()) as { success?: boolean };
+  return data.success === true;
+}
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB per file
 const MAX_TOTAL_FILES = 5;
@@ -30,6 +43,23 @@ function truncate(str: string, max: number): string {
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
+
+    const recaptchaToken = getString(formData, "recaptchaToken");
+    if (RECAPTCHA_SECRET) {
+      if (!recaptchaToken) {
+        return NextResponse.json(
+          { error: "Please complete the security check (reCAPTCHA) and try again." },
+          { status: 400 }
+        );
+      }
+      const valid = await verifyRecaptcha(recaptchaToken);
+      if (!valid) {
+        return NextResponse.json(
+          { error: "Security check failed. Please try again." },
+          { status: 400 }
+        );
+      }
+    }
 
     const patientName = truncate(getString(formData, "patientName"), MAX_FIELD_LENGTH);
     const dob = truncate(getString(formData, "dob"), MAX_FIELD_LENGTH);

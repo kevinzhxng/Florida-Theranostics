@@ -1,9 +1,21 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect, useRef } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
+
+declare global {
+  interface Window {
+    grecaptcha?: {
+      render: (container: string | HTMLElement, options: { sitekey: string; theme?: string; size?: string }) => number;
+      getResponse: (widgetId?: number) => string;
+      reset: (widgetId?: number) => void;
+    };
+  }
+}
 
 const inputClass =
   "w-full px-4 py-2.5 border border-charcoal/20 bg-warm-white text-charcoal focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent transition-all font-sans text-sm";
@@ -90,6 +102,89 @@ export default function ReferralForm({
 
   const [attachments, setAttachments] = useState<File[]>([]);
 
+  const recaptchaContainerRef = useRef<HTMLDivElement>(null);
+  const recaptchaWidgetIdRef = useRef<number | null>(null);
+  const scriptLoadedRef = useRef(false);
+
+  const tryRenderRecaptcha = () => {
+    if (recaptchaWidgetIdRef.current !== null) return false;
+    const container = recaptchaContainerRef.current;
+    if (!container || !window.grecaptcha?.render) return false;
+    try {
+      recaptchaWidgetIdRef.current = window.grecaptcha.render(container, {
+        sitekey: RECAPTCHA_SITE_KEY,
+        theme: "light",
+        size: "normal",
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY || typeof window === "undefined") return;
+    const scriptSrc = "https://www.google.com/recaptcha/api.js?render=explicit";
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${scriptSrc}"]`);
+    if (!script) {
+      script = document.createElement("script");
+      script.src = scriptSrc;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+    const onScriptLoad = () => { scriptLoadedRef.current = true; };
+    if (window.grecaptcha?.render) scriptLoadedRef.current = true;
+    else script.addEventListener("load", onScriptLoad);
+    return () => script?.removeEventListener("load", onScriptLoad);
+  }, [RECAPTCHA_SITE_KEY]);
+
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY || typeof window === "undefined") return;
+    const container = recaptchaContainerRef.current;
+    if (!container || typeof window.IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry?.isIntersecting || recaptchaWidgetIdRef.current !== null) return;
+        if (scriptLoadedRef.current && window.grecaptcha?.render) tryRenderRecaptcha();
+      },
+      { threshold: 0.1, rootMargin: "80px" }
+    );
+    let attempts = 0;
+    const maxAttempts = 50;
+    const checkAndRender = () => {
+      if (recaptchaWidgetIdRef.current !== null || !scriptLoadedRef.current || attempts >= maxAttempts) return;
+      attempts += 1;
+      const el = recaptchaContainerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) tryRenderRecaptcha();
+    };
+    observer.observe(container);
+    const t = setInterval(checkAndRender, 200);
+    return () => { observer.disconnect(); clearInterval(t); };
+  }, [RECAPTCHA_SITE_KEY]);
+
+  const getRecaptchaToken = (): string => {
+    if (typeof window === "undefined" || !window.grecaptcha?.getResponse) return "";
+    try {
+      return window.grecaptcha.getResponse(recaptchaWidgetIdRef.current ?? undefined) ?? "";
+    } catch {
+      return "";
+    }
+  };
+
+  const resetRecaptcha = () => {
+    if (typeof window !== "undefined" && window.grecaptcha?.reset) {
+      try {
+        window.grecaptcha.reset(recaptchaWidgetIdRef.current ?? undefined);
+      } catch {
+        // ignore
+      }
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -129,6 +224,18 @@ export default function ReferralForm({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (RECAPTCHA_SITE_KEY) {
+      const token = getRecaptchaToken();
+      if (!token) {
+        setSubmitStatus({
+          type: "error",
+          message: "Please complete the \"I'm not a robot\" check before submitting.",
+        });
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
 
@@ -215,6 +322,7 @@ export default function ReferralForm({
       );
       body.append("radioligandTherapy", therapyStr);
       if (form.replyEmail) body.append("replyEmail", form.replyEmail);
+      if (RECAPTCHA_SITE_KEY) body.append("recaptchaToken", getRecaptchaToken());
 
       attachments.forEach((file) => body.append("attachments", file));
 
@@ -255,6 +363,7 @@ export default function ReferralForm({
           replyEmail: "",
         });
         setAttachments([]);
+        resetRecaptcha();
       } else {
         setSubmitStatus({
           type: "error",
@@ -458,6 +567,10 @@ export default function ReferralForm({
                 <label htmlFor="replyEmail" className={labelClass}>Your Email (for follow-up)</label>
                 <input type="email" id="replyEmail" name="replyEmail" value={form.replyEmail} onChange={handleChange} className={inputClass} placeholder="your.email@example.com" />
               </div>
+
+              {RECAPTCHA_SITE_KEY && (
+                <div ref={recaptchaContainerRef} aria-label="reCAPTCHA" />
+              )}
 
               {submitStatus.type && (
                 <div className={`p-4 rounded-sm ${submitStatus.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"}`}>

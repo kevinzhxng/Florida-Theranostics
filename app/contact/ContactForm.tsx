@@ -259,7 +259,11 @@ export default function ContactForm({
               <h2 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-6 leading-tight">
                 {formHeading}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4"
+                data-recaptcha-configured={RECAPTCHA_SITE_KEY ? "yes" : "no"}
+              >
                 <div>
                   <label htmlFor="name" className="block text-sm font-sans font-medium text-charcoal mb-2">Name *</label>
                   <input

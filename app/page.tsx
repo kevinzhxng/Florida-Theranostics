@@ -2,10 +2,11 @@ import HeroSection from "@/components/HeroSection";
 import ImageTextSection from "@/components/ImageTextSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import ContactPromoSection from "@/components/ContactPromoSection";
 import Button from "@/components/Button";
 import Section from "@/components/Section";
 import { client } from "@/lib/sanity";
-import { homePageQuery, fetchOptions } from "@/lib/sanity/queries";
+import { homePageQuery, siteSettingsQuery, fetchOptions } from "@/lib/sanity/queries";
 import { getImageUrl } from "@/lib/sanity/helpers";
 
 export const dynamic = "force-dynamic";
@@ -50,9 +51,12 @@ export default async function Home() {
   let testimonialsSectionTitle = "Hear From Our Patients";
   let testimonials = DEFAULT_TESTIMONIALS;
 
+  let sitePhone: string | undefined;
+  let siteAddress: string | undefined;
   if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
     try {
-      const data = await client.fetch<{
+      const [data, siteData] = await Promise.all([
+        client.fetch<{
         heroHeadline?: string | null;
         heroHeadlines?: (string | null)[] | null;
         heroCtaText?: string | null;
@@ -63,7 +67,12 @@ export default async function Home() {
         sections?: Array<{ title?: string; body?: string; imagePosition?: string; image?: unknown; buttonLabel?: string; buttonHref?: string }> | null;
         testimonialsSectionTitle?: string | null;
         testimonials?: Array<{ quote?: string; author?: string }> | null;
-      } | null>(homePageQuery, {}, fetchOptions);
+      } | null>(homePageQuery, {}, fetchOptions),
+        client.fetch<{ phone?: string | null; address?: string | null } | null>(siteSettingsQuery, {}, fetchOptions),
+      ]);
+
+      if (siteData?.phone) sitePhone = siteData.phone;
+      if (siteData?.address) siteAddress = siteData.address;
 
       if (data) {
         const cmsHeadlines = (data.heroHeadlines ?? [])
@@ -146,6 +155,12 @@ export default async function Home() {
         />
       ))}
       <TestimonialsSection title={testimonialsSectionTitle} testimonials={testimonials} />
+      <ContactPromoSection
+        title="Call or visit us!"
+        subtitle="We're here to help. Call to schedule or stop by our Jupiter office."
+        phone={sitePhone}
+        address={siteAddress}
+      />
     </>
   );
 }

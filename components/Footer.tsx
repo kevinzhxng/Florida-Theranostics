@@ -115,14 +115,32 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettings |
             <h4 className="text-xs uppercase tracking-wider text-warm-white/60 mb-6 font-sans font-medium">
               {contactTitle}
             </h4>
-            <div className="text-sm text-warm-white/80 space-y-3 font-sans font-normal leading-relaxed whitespace-pre-line">
-              <p>{address}</p>
-              <p>
-                <a href={`tel:${phone.replace(/\D/g, "")}`} className="hover:text-warm-white transition-colors">
+            <div className="text-sm font-sans font-normal leading-relaxed space-y-4">
+              <p className="text-warm-white/90 whitespace-pre-line flex items-start gap-3">
+                <svg className="w-5 h-5 shrink-0 mt-0.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{address}</span>
+              </p>
+              <p className="flex items-center gap-3">
+                <svg className="w-5 h-5 shrink-0 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <a href={`tel:${phone.replace(/\D/g, "")}`} className="text-warm-white/90 hover:text-teal-200 transition-colors font-medium">
                   {phone}
                 </a>
               </p>
-              <p>{hours}</p>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address.replace(/\n/g, " ").trim())}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200 font-medium transition-colors"
+              >
+                Get directions
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <p className="text-warm-white/70 whitespace-pre-line pt-1">{hours}</p>
             </div>
           </div>
           </div>

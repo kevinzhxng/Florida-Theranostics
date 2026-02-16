@@ -39,6 +39,15 @@ const config: Config = {
         relaxed: "1.75",
         loose: "1.9",
       },
+      keyframes: {
+        "typing-dot": {
+          "0%, 60%, 100%": { transform: "translateY(0)", opacity: "0.5" },
+          "30%": { transform: "translateY(-4px)", opacity: "1" },
+        },
+      },
+      animation: {
+        "typing-dot": "typing-dot 1.4s ease-in-out infinite",
+      },
     },
   },
   plugins: [],

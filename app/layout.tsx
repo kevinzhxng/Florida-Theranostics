@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import HeaderWithBanner from "@/components/HeaderWithBanner";
+import ContactStripWrapper from "@/components/ContactStripWrapper";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
+import GoDaddyChatEmbed from "@/components/GoDaddyChatEmbed";
 import { client } from "@/lib/sanity";
 import { siteSettingsQuery, fetchOptions } from "@/lib/sanity/queries";
 import type { SiteSettings } from "@/lib/types";
@@ -48,9 +51,17 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfairDisplay.variable}`}>
       <body className="antialiased bg-warm-white text-charcoal">
-        <Header siteSettings={siteSettings ?? undefined} />
-        <main className="min-h-screen pt-24 md:pt-28">{children}</main>
+        <HeaderWithBanner siteSettings={siteSettings ?? undefined}>
+          <ContactStripWrapper siteSettings={siteSettings ?? undefined}>
+            {children}
+          </ContactStripWrapper>
+        </HeaderWithBanner>
         <Footer siteSettings={siteSettings ?? undefined} />
+        {process.env.NEXT_PUBLIC_USE_GODADDY_CHAT === "true" ? (
+          <GoDaddyChatEmbed />
+        ) : (
+          <ChatWidget />
+        )}
       </body>
     </html>
   );

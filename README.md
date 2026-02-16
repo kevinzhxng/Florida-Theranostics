@@ -46,11 +46,13 @@ Create **`.env.local`** in the project root with:
 | `RESEND_API_KEY` | Yes (for forms) | From [resend.com](https://resend.com) – contact & referral emails |
 | `CONTACT_EMAIL` | Yes (for contact) | Email that receives contact form submissions |
 | `REFERRAL_EMAIL` | No | Referral form recipient (falls back to `CONTACT_EMAIL`) |
+| `CHAT_EMAIL` | No | Email for built-in chat (falls back to `CONTACT_EMAIL`). Not used if GoDaddy chat is enabled. |
+| `NEXT_PUBLIC_USE_GODADDY_CHAT` | No | Set to `true` to use GoDaddy Conversations chat (widget config in `lib/godaddy-chat-config.ts`). See **CHAT_SETUP.md**. |
 | `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | No (recommended) | reCAPTCHA site key – contact form bot protection |
 | `RECAPTCHA_SECRET_KEY` | No | reCAPTCHA secret (required if site key is set) |
 | `SANITY_API_WRITE_TOKEN` | No | Sanity token with write access – for seed scripts only |
 
-See **CONTACT_SETUP.md**, **CMS_SETUP.md**, and **CONTACT_RECAPTCHA_SETUP.md** for step-by-step setup. Do not commit `.env.local`.
+See **CONTACT_SETUP.md**, **CMS_SETUP.md**, **CHAT_SETUP.md**, and **CONTACT_RECAPTCHA_SETUP.md** for step-by-step setup. Do not commit `.env.local`.
 
 ### 3. Run the website
 

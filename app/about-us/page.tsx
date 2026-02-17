@@ -56,7 +56,7 @@ export default async function AboutUs() {
   let ctaBody = "Reach out to our experts to discuss how our cutting-edge solutions can benefit you or your patients.";
   let ctaButtonLabel = "Collaborate on Patient Care";
   let ctaButtonHref = "/contact";
-  let ctaAddress = "432 University Blvd.\nJupiter, FL 33458";
+  let ctaAddress = "431 University Blvd.\nJupiter, FL 33458";
   let ctaPhone = "(561) 847-3797";
   let ctaHours = "Mon - Fri: 8:00 AM - 5:00 PM\nSat & Sun: Closed";
 

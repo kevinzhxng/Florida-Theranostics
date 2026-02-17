@@ -39,7 +39,7 @@ export default function ContactForm({
   formHeading = "Send a Message",
   submitButtonLabel = "Send Message",
   successMessage = "Thank you! Your message has been sent. We'll get back to you soon.",
-  address = "432 University Blvd.\nJupiter, FL 33458",
+  address = "431 University Blvd.\nJupiter, FL 33458",
   phone = "(561) 847-3797",
   hours = "Mon - Fri: 8:00 AM - 5:00 PM\nSat & Sun: Closed",
 }: {

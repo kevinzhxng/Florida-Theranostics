@@ -1,0 +1,34 @@
+RESTART AND TEST THE AI BOT (fresh run)
+======================================
+
+When you've changed Reamaze settings or the widget and want to see if the bot replies automatically:
+
+1. Restart the dev server
+   - In the terminal where npm run dev is running: press Ctrl+C
+   - Run: npm run dev
+   - Wait for "Ready" and http://localhost:3000
+
+2. Load the site without old cache
+   - Option A: Open an Incognito/Private window, go to http://localhost:3000
+   - Option B: In a normal window, hard refresh: Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)
+
+3. Optional: clear chat widget state
+   - F12 → Application tab → Local Storage → http://localhost:3000 → Clear All
+   - Close DevTools, refresh the page (so the widget doesn't reuse an old conversation)
+
+4. Test the bot
+   - Click the chat widget (bottom-right)
+   - Send one message, e.g. "What's your phone number?"
+   - Wait 5–10 seconds
+   - If the AI Agent is on AND has content (FAQ or custom context), you should see a BOT REPLY IN THE CHAT
+   - If you only see your message and no reply in the widget, the bot is still not replying (messages are going straight to the inbox)
+
+INBOX AI vs AUTOMATIC BOT REPLY
+-------------------------------
+
+- Inbox AI = You're in the GoDaddy Inbox and use "Suggest a response" so YOU send a reply. The visitor gets nothing until you send it.
+
+- Automatic bot reply = The AI Agent replies IN THE WIDGET by itself so the visitor sees an answer right away.
+
+If you only get inbox AI and no automatic reply in the widget:
+The AI Agent must be ON in Reamaze AND have something to answer from (published FAQ article or custom AI context in Settings → Brands → AI Settings). Without that, Reamaze has nothing to say and sends the conversation to the inbox.

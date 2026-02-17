@@ -113,7 +113,7 @@ async function seed() {
     footerResourcesTitle: "Resources",
     footerContactTitle: "Contact",
     footerCopyright: "Florida Theranostics. All rights reserved.",
-    address: "432 University Blvd.\nJupiter, FL 33458",
+    address: "431 University Blvd.\nJupiter, FL 33458",
     phone: "(561) 847-3797",
     hours: "Mon - Fri: 8:00 AM - 5:00 PM\nSat & Sun: Closed",
   });

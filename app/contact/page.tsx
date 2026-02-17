@@ -15,7 +15,7 @@ export default async function ContactPage() {
   let formHeading = "Send a Message";
   let submitButtonLabel = "Send Message";
   let successMessage = "Thank you! Your message has been sent. We'll get back to you soon.";
-  let address = "432 University Blvd.\nJupiter, FL 33458";
+  let address = "431 University Blvd.\nJupiter, FL 33458";
   let phone = "(561) 847-3797";
   let hours = "Mon - Fri: 8:00 AM - 5:00 PM\nSat & Sun: Closed";
 

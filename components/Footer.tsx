@@ -24,7 +24,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettings |
   const resourcesTitle = siteSettings?.footerResourcesTitle ?? "Resources";
   const contactTitle = siteSettings?.footerContactTitle ?? "Contact";
   const copyrightText = siteSettings?.footerCopyright ?? "Florida Theranostics. All rights reserved.";
-  const address = siteSettings?.address ?? "432 University Blvd.\nJupiter, FL 33458";
+  const address = siteSettings?.address ?? "431 University Blvd.\nJupiter, FL 33458";
   const phone = siteSettings?.phone ?? "(561) 847-3797";
   const hours = siteSettings?.hours ?? "Mon - Fri: 8:00 AM - 5:00 PM\nSat & Sun: Closed";
   const patientPortalHref = siteSettings?.navPatientPortalHref ?? "https://mycw174.ecwcloud.com/portal23145/jsp/100mp/login_otp.jsp";

@@ -9,7 +9,7 @@ function buildDirectionsUrl(address: string): string {
 
 export default function ContactStrip({ siteSettings }: { siteSettings?: SiteSettings | null }) {
   const phone = siteSettings?.phone ?? "(561) 847-3797";
-  const address = siteSettings?.address ?? "432 University Blvd., Jupiter, FL 33458";
+  const address = siteSettings?.address ?? "431 University Blvd., Jupiter, FL 33458";
   const addressOneLine = address.replace(/\n/g, ", ").trim();
   const directionsUrl = buildDirectionsUrl(address);
 

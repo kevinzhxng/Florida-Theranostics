@@ -19,18 +19,23 @@ export const GODADDY_CHAT_INLINE_SCRIPT = `
   };
   _support['ui']['shoutboxFacesMode'] = '';
   _support['ui']['widget'] = {
-    allowBotProcessing: 'false',
+    allowBotProcessing: 'true',
     slug: 'florida-theranostics-80297527c2cbe4d5',
     label: {
       text: 'Let us know if you have any questions! 😊',
       mode: "notification",
-      delay: 3,
+      delay: 1,
       duration: 30,
-      primary: '',
+      primary: 'What is your phone number?',
+      primary2: 'Where are we located?',
+      primary3: 'What times are we open?',
+      primary4: 'How can I book an appointment?',
+      secondary: '',
       sound: true,
     },
     position: 'bottom-right'
   };
+  _support['ui']['overrides'] = _support['ui']['overrides'] || {};
   _support['apps'] = {
     recentConversations: {},
     faq: {"enabled":true}

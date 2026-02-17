@@ -2,7 +2,7 @@ import Container from "./Container";
 import Section from "./Section";
 
 const DEFAULT_PHONE = "(561) 847-3797";
-const DEFAULT_ADDRESS = "432 University Blvd., Jupiter, FL 33458";
+const DEFAULT_ADDRESS = "431 University Blvd., Jupiter, FL 33458";
 
 function buildDirectionsUrl(address: string): string {
   const query = address.replace(/\n/g, " ").trim();

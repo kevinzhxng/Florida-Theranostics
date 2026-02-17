@@ -10,7 +10,7 @@ function buildDirectionsUrl(address: string): string {
 
 export default function HomepageContactBanner({
   phone = "(561) 847-3797",
-  address = "432 University Blvd., Jupiter, FL 33458",
+  address = "431 University Blvd., Jupiter, FL 33458",
   onDismiss,
 }: {
   phone?: string;

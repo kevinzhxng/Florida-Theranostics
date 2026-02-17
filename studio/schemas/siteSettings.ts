@@ -119,7 +119,7 @@ export const siteSettings = defineType({
       title: "Address",
       type: "text",
       group: "contact",
-      description: "e.g. 432 University Blvd.\\nJupiter, FL 33458",
+      description: "e.g. 431 University Blvd. (new line) Jupiter, FL 33458",
     }),
     defineField({
       name: "phone",

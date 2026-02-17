@@ -9,6 +9,7 @@ import GoDaddyChatEmbed from "@/components/GoDaddyChatEmbed";
 import { client } from "@/lib/sanity";
 import { siteSettingsQuery, fetchOptions } from "@/lib/sanity/queries";
 import type { SiteSettings } from "@/lib/types";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -62,6 +63,7 @@ export default async function RootLayout({
         ) : (
           <ChatWidget />
         )}
+        <Analytics />
       </body>
     </html>
   );

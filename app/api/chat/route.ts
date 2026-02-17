@@ -41,8 +41,9 @@ export async function POST(request: NextRequest) {
     const emailEsc = escapeHtml(email || "(not provided)");
     const messageEsc = escapeHtml(message);
 
+    const fromAddress = process.env.RESEND_FROM || "Florida Theranostics Website <onboarding@resend.dev>";
     const { error } = await resend.emails.send({
-      from: "Florida Theranostics Website <onboarding@resend.dev>",
+      from: fromAddress,
       to: [recipientEmail],
       reply_to: email || undefined,
       subject: `Website chat: ${name ? `${name} – ` : ""}${message.slice(0, 50)}${message.length > 50 ? "…" : ""}`,

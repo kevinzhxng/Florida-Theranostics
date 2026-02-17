@@ -204,8 +204,9 @@ Radioligand Therapy: ${radioligandTherapy ?? ""}
 ${replyEmail ? `Reply-to: ${replyEmail}` : ""}
     `.trim();
 
+    const fromAddress = process.env.RESEND_FROM || "Florida Theranostics Referrals <onboarding@resend.dev>";
     const { data, error } = await resend.emails.send({
-      from: "Florida Theranostics Referrals <onboarding@resend.dev>",
+      from: fromAddress,
       to: [recipientEmail],
       reply_to: replyEmail || undefined,
       subject: `New Referral: ${patientName} – ${referringPhysician}`,

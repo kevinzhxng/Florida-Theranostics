@@ -106,9 +106,10 @@ export async function POST(request: NextRequest) {
     const messageEsc = escapeHtml(messageStr);
     const phoneEsc = escapeHtml(phoneDisplay);
 
-    // Send email using Resend
+    // Send email using Resend (RESEND_FROM = your verified domain, e.g. contact@floridatheranostics.com)
+    const fromAddress = process.env.RESEND_FROM || "Florida Theranostics Contact <onboarding@resend.dev>";
     const { data, error } = await resend.emails.send({
-      from: "Florida Theranostics Contact <onboarding@resend.dev>", // Update this with your verified domain
+      from: fromAddress,
       to: [recipientEmail],
       reply_to: emailStr,
       subject: `New Contact Form Submission from ${nameStr}`,

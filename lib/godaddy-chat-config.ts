@@ -24,18 +24,16 @@ export const GODADDY_CHAT_INLINE_SCRIPT = `
     label: {
       text: 'Let us know if you have any questions! 😊',
       mode: "notification",
-      delay: 1,
+      delay: 2,
       duration: 30,
-      primary: 'What is your phone number?',
-      primary2: 'Where are we located?',
-      primary3: 'What times are we open?',
-      primary4: 'How can I book an appointment?',
+      primary: '',
       secondary: '',
       sound: true,
     },
     position: 'bottom-right'
   };
   _support['ui']['overrides'] = _support['ui']['overrides'] || {};
+  _support['ui']['overrides']['confirmationMessage'] = 'Please dial us at (561) 847-3797!';
   _support['apps'] = {
     recentConversations: {},
     faq: {"enabled":true}

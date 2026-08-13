@@ -6,6 +6,7 @@ import ContactStripWrapper from "@/components/ContactStripWrapper";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 import GoDaddyChatEmbed from "@/components/GoDaddyChatEmbed";
+import GoogleTag from "@/components/GoogleTag";
 import { client } from "@/lib/sanity";
 import { siteSettingsQuery, fetchOptions } from "@/lib/sanity/queries";
 import type { SiteSettings } from "@/lib/types";
@@ -51,6 +52,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${inter.variable} ${playfairDisplay.variable}`}>
+      <head>
+        <GoogleTag />
+      </head>
       <body className="antialiased bg-warm-white text-charcoal">
         <HeaderWithBanner siteSettings={siteSettings ?? undefined}>
           <ContactStripWrapper siteSettings={siteSettings ?? undefined}>

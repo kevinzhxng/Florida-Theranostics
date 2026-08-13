@@ -52,6 +52,7 @@ Create **`.env.local`** in the project root with:
 | `NEXT_PUBLIC_USE_GODADDY_CHAT` | No | Set to `true` to use GoDaddy Conversations chat widget. Config in `lib/godaddy-chat-config.ts`. See **CHAT_SETUP.md**. |
 | `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | No (recommended) | reCAPTCHA site key – contact/referral bot protection |
 | `RECAPTCHA_SECRET_KEY` | No | reCAPTCHA secret (required if site key is set) |
+| `NEXT_PUBLIC_GOOGLE_TAG_ID` | No | Google tag / GA4 / Ads / GTM ID. Accepts `G-XXXXXXX` (GA4), `AW-XXXXXXX` (Ads), `DC-XXXXXXX` (Floodlight), or `GTM-XXXXXXX` (Tag Manager). If unset, no tag is loaded. |
 | `SANITY_API_WRITE_TOKEN` | No | Sanity token with write access – for seed scripts only |
 
 See **RESEND_SETUP.md** (Resend account, domain verification, `RESEND_FROM`), **CHAT_SETUP.md**, and **CONTACT_RECAPTCHA_SETUP.md** for step-by-step setup. Do not commit `.env.local`.

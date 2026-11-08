@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { imagingReferralStudies } from "../../lib/imaging-content";
 
 export const referralPage = defineType({
   name: "referralPage",
@@ -29,6 +30,17 @@ export const referralPage = defineType({
       title: "Success message after submit",
       type: "string",
       initialValue: "Thank you. Your referral has been submitted. We will process it and contact you as needed.",
+    }),
+    defineField({
+      name: "imagingStudyLabels",
+      title: "New imaging study labels",
+      type: "object",
+      description: "Optional display labels for the new studies. Leave a field empty to use the default shown. This does not change study identifiers or email delivery.",
+      fields: imagingReferralStudies.map(({ field, label }) => defineField({
+        name: field,
+        title: label,
+        type: "string",
+      })),
     }),
   ],
   preview: {

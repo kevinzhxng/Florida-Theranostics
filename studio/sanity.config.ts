@@ -87,6 +87,14 @@ export default defineConfig({
                           .documentId("molecularImagingPage")
                       ),
                     S.listItem()
+                      .title("FET PET — Glioma Imaging")
+                      .id("fetPetPage")
+                      .child(S.document().schemaType("fetPetPage").documentId("fetPetPage")),
+                    S.listItem()
+                      .title("Cardiac Imaging")
+                      .id("cardiacImagingPage")
+                      .child(S.document().schemaType("cardiacImagingPage").documentId("cardiacImagingPage")),
+                    S.listItem()
                       .title("Technology")
                       .id("technologyPage")
                       .child(
@@ -138,6 +146,8 @@ export default defineConfig({
           { route: "/about-us", type: "aboutPage" },
           { route: "/therapies", type: "therapiesPage" },
           { route: "/molecular-imaging", type: "molecularImagingPage" },
+          { route: "/molecular-imaging/fet-pet", type: "fetPetPage" },
+          { route: "/molecular-imaging/cardiac-imaging", type: "cardiacImagingPage" },
           { route: "/technology", type: "technologyPage" },
           { route: "/referral", type: "referralPage" },
           { route: "/contact", type: "contactPage" },

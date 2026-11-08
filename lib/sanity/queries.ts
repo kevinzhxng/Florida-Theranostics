@@ -21,6 +21,8 @@ export const siteSettingsQuery = groq`
     footerCopyright,
     address,
     phone,
+    imagingReferralEmail,
+    imagingReferralFax,
     hours
   }
 `;
@@ -121,7 +123,8 @@ export const molecularImagingPageQuery = groq`
       name,
       subtitle,
       description,
-      image
+      image,
+      href
     },
     spectCtTitle,
     spectCtIntro,
@@ -168,7 +171,8 @@ export const referralPageQuery = groq`
     pageTitle,
     pageSubtitle,
     phoneNumbers,
-    successMessage
+    successMessage,
+    imagingStudyLabels { fetPetStudyLabel, calciumScoreStudyLabel, cctaStudyLabel, cleerlyStudyLabel }
   }
 `;
 

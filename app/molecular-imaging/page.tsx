@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ImageTextSection from "@/components/ImageTextSection";
@@ -7,6 +8,9 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import { client } from "@/lib/sanity";
 import { molecularImagingPageQuery, fetchOptions } from "@/lib/sanity/queries";
 import { getImageUrl } from "@/lib/sanity/helpers";
+import ImagingFeatureCards from "@/components/imaging/ImagingFeatureCards";
+import { FET_PET_SERVICE, withFetPetService, type ImagingModality } from "@/lib/imaging-services";
+import { getImagingPage } from "@/lib/sanity/imaging";
 
 export const metadata = {
   title: "Molecular Imaging | Florida Theranostics",
@@ -32,6 +36,7 @@ const DEFAULT_SPECT_CT = [
 ];
 
 export default async function MolecularImagingPage() {
+  const servicePages = Promise.all([getImagingPage("fet-pet"), getImagingPage("cardiac-imaging")]);
   let heroTitle = "Advanced Molecular PET Imaging Solutions";
   let heroBody = "Florida Theranostics specializes in state-of-the-art molecular imaging solutions, including our renowned molecular PET scan. We offer advanced diagnostic and therapeutic services for comprehensive cancer treatment and management.\n\nWe proudly partner with oncology experts and primary doctors to optimize therapy and improve patient outcomes.";
   let heroImageSrc = "/images/Ultrafast-PET-Imaging.webp";
@@ -39,7 +44,7 @@ export default async function MolecularImagingPage() {
   let introBody = "Our imaging capabilities combine the latest in PET-CT and SPECT-CT technology to deliver precise, reliable diagnostics.";
   let petCtTitle = "PET-CT Imaging";
   let petCtSubtitle = "Positron Emission Tomography – Computed Tomography";
-  let petCtModalities = DEFAULT_PET_CT;
+  let petCtModalities: ImagingModality[] = DEFAULT_PET_CT;
   let spectCtTitle = "SPECT-CT Nuclear Medicine Imaging";
   let spectCtIntro = "SPECT-CT (Single-Photon Emission Computed Tomography – Computed Tomography) combines functional SPECT imaging with anatomical CT. Radioactive tracers show how organs and tissues function, while CT provides detailed anatomy.";
   let spectCtModalities = DEFAULT_SPECT_CT;
@@ -68,7 +73,7 @@ export default async function MolecularImagingPage() {
         introBody?: string | null;
         petCtTitle?: string | null;
         petCtSubtitle?: string | null;
-        petCtModalities?: Array<{ name?: string; subtitle?: string; description?: string; image?: unknown }> | null;
+        petCtModalities?: Array<{ name?: string; subtitle?: string; description?: string; image?: unknown; href?: string }> | null;
         spectCtTitle?: string | null;
         spectCtIntro?: string | null;
         spectCtModalities?: Array<{ name?: string; subtitle?: string; description?: string; image?: unknown }> | null;
@@ -91,7 +96,7 @@ export default async function MolecularImagingPage() {
         if (data.introBody) introBody = data.introBody ?? introBody;
         if (data.petCtTitle) petCtTitle = data.petCtTitle;
         if (data.petCtSubtitle) petCtSubtitle = data.petCtSubtitle ?? petCtSubtitle;
-        if (data.petCtModalities?.length) petCtModalities = data.petCtModalities.map((m, i) => ({ name: m.name ?? DEFAULT_PET_CT[i]?.name ?? "", subtitle: m.subtitle ?? "", description: m.description ?? "", imageSrc: getImageUrl(m.image) ?? DEFAULT_PET_CT[i]?.imageSrc ?? "" }));
+        if (data.petCtModalities?.length) petCtModalities = data.petCtModalities.map((m, i) => ({ name: m.name ?? DEFAULT_PET_CT[i]?.name ?? "", subtitle: m.subtitle ?? "", description: m.description ?? "", imageSrc: getImageUrl(m.image) ?? DEFAULT_PET_CT[i]?.imageSrc ?? "", href: m.href }));
         if (data.spectCtTitle) spectCtTitle = data.spectCtTitle;
         if (data.spectCtIntro) spectCtIntro = data.spectCtIntro ?? spectCtIntro;
         if (data.spectCtModalities?.length) spectCtModalities = data.spectCtModalities.map((m, i) => ({ name: m.name ?? DEFAULT_SPECT_CT[i]?.name ?? "", subtitle: m.subtitle ?? "", description: m.description ?? "", imageSrc: getImageUrl(m.image) ?? DEFAULT_SPECT_CT[i]?.imageSrc ?? "" }));
@@ -111,6 +116,15 @@ export default async function MolecularImagingPage() {
     }
   }
 
+  const [{ content: fet }, { content: cardiac }] = await servicePages;
+  petCtModalities = withFetPetService(petCtModalities, {
+    ...FET_PET_SERVICE,
+    name: fet.petListingTitle ?? FET_PET_SERVICE.name,
+    subtitle: fet.petListingSubtitle ?? FET_PET_SERVICE.subtitle,
+    description: fet.petListingDescription ?? FET_PET_SERVICE.description,
+    imageSrc: fet.posterSrc,
+  });
+
   return (
     <>
       <ImageTextSection title={heroTitle} content={<div className="space-y-6">{heroBody.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}</div>} imagePosition="right" imageSrc={heroImageSrc} imageAlt={heroTitle} />
@@ -124,6 +138,7 @@ export default async function MolecularImagingPage() {
           </Container>
         </ScrollReveal>
       </Section>
+      <ImagingFeatureCards pages={[fet, cardiac]} />
       <Section className="py-10 md:py-14 bg-warm-white">
         <ScrollReveal>
           <Container>
@@ -140,9 +155,10 @@ export default async function MolecularImagingPage() {
                         <Image src={modality.imageSrc} alt={modality.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                       </div>
                     )}
-                    <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{modality.name}</h3>
+                    <h3 className="text-xl md:text-2xl font-serif font-normal text-charcoal mb-1 leading-tight">{modality.href ? <Link href={modality.href} className="hover:text-navy hover:underline underline-offset-4">{modality.name}</Link> : modality.name}</h3>
                     <p className="text-sm uppercase tracking-wider text-navy/80 font-sans mb-4">{modality.subtitle}</p>
                     <p className="text-lg text-text-muted leading-loose">{modality.description}</p>
+                    {modality.href && <Link href={modality.href} className="mt-4 inline-block text-sm font-sans font-medium text-navy underline underline-offset-4 hover:text-[#276c73]">Learn more <span aria-hidden="true">→</span></Link>}
                   </div>
                 ))}
               </div>

@@ -171,6 +171,32 @@ Content is managed in **Sanity Studio**. After seeding (or creating documents ma
 
 ---
 
+## Imaging release and editing guide
+
+The approved page copy and original flyers are bundled as defaults. No dataset seed is required. The site uses published Sanity values when present, and uses the defaults if a document or field is missing. Unpublishing a page document restores the defaults; it does not remove the website route. Turn off **Show feature card** to remove an individual promotion without taking its page offline.
+
+| To edit | In Sanity Studio |
+| --- | --- |
+| FET PET or Cardiac Imaging headings, overview, clinical/service cards, flyer and caption, referral instructions, or SEO | **Pages → FET PET — Glioma Imaging** or **Pages → Cardiac Imaging** |
+| Imaging landing cards: badge, heading, description, link label, and visibility | On either service document, open **Imaging landing page** |
+| FET PET title, subtitle, and description in the PET-CT grid | **Pages → FET PET — Glioma Imaging → Imaging landing page**. The flyer also supplies the thumbnail. The website inserts the listing after Amyloid PET Brain. An existing FET PET item in the Molecular Imaging document takes precedence; edit that item there if one was added manually. |
+| Public physician referral email and fax | **Global → Site Settings → Contact Info**. The displayed phone and address come from the same tab. |
+| Display labels for the four new form choices | **Pages → Referral → New imaging study labels**. Study identifiers and the submission flow remain fixed. |
+
+Upload a revised flyer to change text printed inside the image. If an email, fax number, or other detail changes, update both the editable website text and the flyer artwork where it appears.
+
+### Imaging release sequence
+
+1. Build the site and Studio from the same code revision. Verify the Vercel preview uses the intended Sanity project and dataset. Check both landing cards and service pages on desktop and portrait mobile, including the flyers, referral links, FET PET preselection, and search metadata.
+2. Confirm the existing hosted Studio target and production preview origin (`https://www.floridatheranostics.com`). Deploy the updated Studio from `studio/` with `npm run deploy` so editors see the new fields. Do not run `seed:sanity` or `seed:all`; those scripts replace existing CMS documents.
+3. In Studio, open the two new entries under **Pages**, review the prefilled fields, and publish both documents. The defaults cover fields left empty, including flyers. Existing Site Settings and Referral documents only need to be changed when overriding their defaults. The website reads published content; the Studio website preview is not wired for unpublished drafts.
+4. Confirm the production branch in Vercel before merging. Once the website deploys, verify the landing page, both service URLs, and `/sitemap.xml` on the production domain. Keep the previous deployment available for rollback.
+5. Confirm the clinic-approved recipient for the online referral form and test delivery with synthetic information only. The public email field controls the visible email link; Vercel’s `REFERRAL_EMAIL` (or the existing `CONTACT_EMAIL` fallback) controls the actual form destination. Confirm the sender and reCAPTCHA configuration too.
+
+The existing referral form advertises 10 MB per file, while [Vercel Functions document a 4.5 MB cap per request](https://vercel.com/docs/functions/limitations). Confirm how the clinic wants larger reports delivered and align the form with that workflow before relying on attachments. The site also runs Next.js 14.2.35, which is [outside Next.js support](https://nextjs.org/support-policy); plan the framework upgrade separately from the imaging changes.
+
+---
+
 ## License
 
 Proprietary – Florida Theranostics.

@@ -23,6 +23,8 @@ export interface SiteSettings {
   footerCopyright?: string | null;
   address?: string | null;
   phone?: string | null;
+  imagingReferralEmail?: string | null;
+  imagingReferralFax?: string | null;
   hours?: string | null;
 }
 

@@ -4,6 +4,7 @@ import { useState, FormEvent, useEffect, useRef } from "react";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import { imagingReferralStudies, type ImagingReferralLabels } from "@/lib/imaging-content";
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
 
@@ -21,7 +22,8 @@ const inputClass =
   "w-full px-4 py-2.5 border border-charcoal/20 bg-warm-white text-charcoal focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent transition-all font-sans text-sm";
 const labelClass = "block text-sm font-sans font-medium text-charcoal mb-2";
 
-const MOLECULAR_IMAGING_OPTIONS = [
+const [fetPetStudy, ...cardiacStudies] = imagingReferralStudies;
+const MOLECULAR_IMAGING_OPTIONS: { value: string; label: string; field?: keyof ImagingReferralLabels }[] = [
   { value: "pet-fdg-skull-mid-thigh", label: "PET-CT F-18 FDG – Skull-base to Mid-Thigh" },
   { value: "pet-fdg-whole-body", label: "PET-CT F-18 FDG – Whole Body" },
   { value: "pet-fdg-brain", label: "PET-CT F-18 FDG – Brain Metabolic" },
@@ -29,11 +31,13 @@ const MOLECULAR_IMAGING_OPTIONS = [
   { value: "pet-psma", label: "PET-CT Specialty – PSMA" },
   { value: "pet-dotatate", label: "PET-CT Specialty – DOTATATE" },
   { value: "pet-amyloid", label: "PET-CT Specialty – Amyloid PET (Alzheimer's)" },
+  fetPetStudy,
   { value: "pet-cerianna", label: "PET-CT Specialty – Cerianna (ER+ Breast Cancer)" },
   { value: "pet-flurpiridaz", label: "PET-CT Specialty – Flurpiridaz (Cardiac PET)" },
   { value: "nm-i123-thyroid", label: "Nuclear Medicine – I-123 Thyroid Uptake and SPECT-CT" },
   { value: "nm-parathyroid", label: "Nuclear Medicine – Parathyroid Sestamibi SPECT-CT" },
   { value: "nm-bone-scan", label: "Nuclear Medicine – Whole Body Bone Scan SPECT-CT" },
+  ...cardiacStudies,
   { value: "other", label: "Other" },
 ];
 
@@ -60,11 +64,15 @@ export default function ReferralForm({
   pageSubtitle = "For referring providers · FLT Molecular Imaging and Therapy Ordering Form (HIPAA-compliant)",
   phoneNumbers = ["(561) 847-3797", "(561) 600-4476"],
   successMessage = "Thank you. Your referral has been submitted. We will process it and contact you as needed.",
+  imagingStudyLabels,
+  initialStudy,
 }: {
   pageTitle?: string;
   pageSubtitle?: string;
   phoneNumbers?: string[];
   successMessage?: string;
+  imagingStudyLabels?: ImagingReferralLabels;
+  initialStudy?: string;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
@@ -94,7 +102,7 @@ export default function ReferralForm({
     physicianPhone: "",
     physicianFax: "",
     diagnosisReason: "",
-    molecularImaging: [] as string[],
+    molecularImaging: initialStudy && MOLECULAR_IMAGING_OPTIONS.some((option) => option.value === initialStudy) ? [initialStudy] : [] as string[],
     radioligandTherapy: [] as string[],
     otherImaging: "",
     replyEmail: "",
@@ -533,7 +541,7 @@ export default function ReferralForm({
                       {MOLECULAR_IMAGING_OPTIONS.map((opt) => (
                         <label key={opt.value} className="flex items-center gap-2 text-sm font-sans text-charcoal cursor-pointer">
                           <input type="checkbox" checked={form.molecularImaging.includes(opt.value)} onChange={(e) => handleCheckbox("molecularImaging", opt.value, e.target.checked)} className="rounded border-charcoal/30 text-navy focus:ring-navy" />
-                          <span>{opt.label}</span>
+                          <span>{(opt.field && imagingStudyLabels?.[opt.field]?.trim()) || opt.label}</span>
                         </label>
                       ))}
                     </div>

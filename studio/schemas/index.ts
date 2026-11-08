@@ -8,6 +8,7 @@ import { molecularImagingPage } from "./molecularImagingPage";
 import { technologyPage } from "./technologyPage";
 import { referralPage } from "./referralPage";
 import { contactPage } from "./contactPage";
+import { fetPetPage, cardiacImagingPage } from "./imagingServicePages";
 
 export const schemaTypes = [
   navLink,
@@ -21,4 +22,6 @@ export const schemaTypes = [
   technologyPage,
   referralPage,
   contactPage,
+  fetPetPage,
+  cardiacImagingPage,
 ];

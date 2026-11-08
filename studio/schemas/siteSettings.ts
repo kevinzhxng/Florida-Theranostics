@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { IMAGING_REFERRAL_EMAIL, IMAGING_REFERRAL_FAX } from "../../lib/imaging-content";
 
 export const siteSettings = defineType({
   name: "siteSettings",
@@ -133,6 +134,22 @@ export const siteSettings = defineType({
       type: "text",
       group: "contact",
       description: "e.g. Mon - Fri: 8:00 AM - 5:00 PM\\nSat & Sun: Closed",
+    }),
+    defineField({
+      name: "imagingReferralEmail",
+      title: "Public imaging referral email",
+      type: "string",
+      group: "contact",
+      description: `Shown on both imaging pages. Default: ${IMAGING_REFERRAL_EMAIL}. This does not change where the online form is sent.`,
+      validation: (R) => R.email(),
+    }),
+    defineField({
+      name: "imagingReferralFax",
+      title: "Public imaging referral fax",
+      type: "string",
+      group: "contact",
+      description: `Shown on both imaging pages. Default: ${IMAGING_REFERRAL_FAX}.`,
+      validation: (R) => R.regex(/^[+\d][\d\s().-]*$|^\(\d[\d\s().-]*$/, { name: "fax number" }),
     }),
   ],
   preview: {
